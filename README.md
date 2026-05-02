@@ -204,6 +204,10 @@ Or in the block editor: **DB SEO → Breadcrumbs**.
 
 ## Changelog
 
+### 1.2.2 — Removed duplicated menu voices
+
+### 1.2.1 — Fixed Out of memory error
+
 ### 1.2.0 — Cookie Manager Alignment
 
 Aligns the SEO Manager to the rebuilt **DB Cookie Manager 3.0.2** and establishes the inter-plugin DB ecosystem protocol. All changes are additive: SEO Manager keeps working standalone or with any consent manager.
