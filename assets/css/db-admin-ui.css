@@ -1,0 +1,511 @@
+/**
+ * DB Admin UI — Shared Design System
+ * Versione: 1.0.0
+ *
+ * Filosofia:
+ *  - Aggiunge, non sovrascrive WP core. Prefix db-ui-* per evitare conflitti.
+ *  - Self-contained: nessun import esterno, nessun font CDN.
+ *  - Accessibile: focus-visible, aria-label sui tip, colori non come unico indicatore.
+ *  - Risponsivo a 782px (breakpoint admin mobile WP).
+ *  - Rispetta prefers-reduced-motion e forced-colors.
+ */
+
+:root {
+    /* ---- Colori ---- */
+    --db-primary:        #2271b1;
+    --db-primary-hover:  #135e96;
+    --db-primary-light:  #e8f0fe;
+    --db-success:        #1d6e3f;
+    --db-success-light:  #e7f5e7;
+    --db-warning:        #dba617;
+    --db-warning-light:  #fff8e1;
+    --db-warning-dark:   #7a5d00;
+    --db-danger:         #d63638;
+    --db-danger-light:   #fce4e4;
+
+    --db-text:           #1d2327;
+    --db-text-muted:     #646970;
+    --db-text-light:     #999;
+
+    --db-bg:             #ffffff;
+    --db-bg-subtle:      #f6f7f7;
+    --db-bg-hover:       #f0f0f1;
+
+    --db-border:         #dcdcde;
+    --db-border-light:   #e9ecef;
+
+    /* ---- Layout ---- */
+    --db-radius:    8px;
+    --db-radius-sm: 6px;
+    --db-radius-lg: 12px;
+
+    --db-shadow:    0 1px 2px rgba(0, 0, 0, .05);
+    --db-shadow-md: 0 2px 6px rgba(0, 0, 0, .08);
+    --db-shadow-lg: 0 8px 24px rgba(0, 0, 0, .12);
+
+    --db-transition: 0.15s ease;
+}
+
+/* ============================================================
+ * Page Header
+ * ========================================================== */
+.db-ui-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: var(--db-bg);
+    border: 1px solid var(--db-border);
+    border-radius: var(--db-radius);
+    padding: 16px 20px;
+    margin: 0 0 16px;
+    box-shadow: var(--db-shadow);
+}
+.db-ui-page-header h1 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.3;
+    color: var(--db-text);
+}
+.db-ui-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ============================================================
+ * Card
+ * ========================================================== */
+.db-ui-card {
+    background: var(--db-bg);
+    border: 1px solid var(--db-border);
+    border-radius: var(--db-radius);
+    box-shadow: var(--db-shadow);
+    margin: 0 0 16px;
+    overflow: hidden;
+    transition: box-shadow var(--db-transition);
+}
+.db-ui-card:hover {
+    box-shadow: var(--db-shadow-md);
+}
+.db-ui-card-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--db-border-light);
+    background: var(--db-bg-subtle);
+}
+.db-ui-card-header h2,
+.db-ui-card-header h3 {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--db-text);
+}
+.db-ui-card-body {
+    padding: 18px;
+}
+.db-ui-card-footer {
+    padding: 12px 18px;
+    border-top: 1px solid var(--db-border-light);
+    background: var(--db-bg-subtle);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ============================================================
+ * Buttons
+ * ========================================================== */
+.db-ui-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: var(--db-radius-sm);
+    border: 1px solid var(--db-border);
+    background: var(--db-bg);
+    color: var(--db-text);
+    font: inherit;
+    font-size: 13px;
+    line-height: 1.4;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--db-transition), border-color var(--db-transition), color var(--db-transition);
+}
+.db-ui-btn:hover {
+    background: var(--db-bg-hover);
+    color: var(--db-text);
+}
+.db-ui-btn:focus-visible {
+    outline: 2px solid var(--db-primary);
+    outline-offset: 2px;
+}
+.db-ui-btn:disabled,
+.db-ui-btn[disabled] {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.db-ui-btn-primary {
+    background: var(--db-primary);
+    border-color: var(--db-primary);
+    color: #fff;
+}
+.db-ui-btn-primary:hover {
+    background: var(--db-primary-hover);
+    border-color: var(--db-primary-hover);
+    color: #fff;
+}
+
+.db-ui-btn-success {
+    background: var(--db-success);
+    border-color: var(--db-success);
+    color: #fff;
+}
+.db-ui-btn-success:hover {
+    background: #155a32;
+    border-color: #155a32;
+    color: #fff;
+}
+
+.db-ui-btn-danger {
+    background: var(--db-danger);
+    border-color: var(--db-danger);
+    color: #fff;
+}
+.db-ui-btn-danger:hover {
+    background: #b32d2e;
+    border-color: #b32d2e;
+    color: #fff;
+}
+
+.db-ui-btn-sm { padding: 4px 9px; font-size: 12px; }
+.db-ui-btn-lg { padding: 10px 20px; font-size: 14px; }
+.db-ui-btn-icon {
+    padding: 6px 8px;
+    min-width: 32px;
+}
+
+/* ============================================================
+ * Badges
+ * ========================================================== */
+.db-ui-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.6;
+    background: var(--db-bg-hover);
+    color: var(--db-text);
+    white-space: nowrap;
+}
+.db-ui-badge-primary { background: var(--db-primary-light); color: var(--db-primary-hover); }
+.db-ui-badge-success { background: var(--db-success-light); color: var(--db-success); }
+.db-ui-badge-warning { background: var(--db-warning-light); color: var(--db-warning-dark); }
+.db-ui-badge-danger  { background: var(--db-danger-light);  color: var(--db-danger); }
+.db-ui-badge-muted   { background: var(--db-bg-subtle);     color: var(--db-text-muted); }
+
+/* ============================================================
+ * Progress
+ * ========================================================== */
+.db-ui-progress {
+    height: 8px;
+    background: var(--db-bg-subtle);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.db-ui-progress-fill {
+    height: 100%;
+    background: var(--db-primary);
+    transition: width var(--db-transition);
+}
+.db-ui-progress-success .db-ui-progress-fill { background: var(--db-success); }
+.db-ui-progress-warning .db-ui-progress-fill { background: var(--db-warning); }
+.db-ui-progress-danger  .db-ui-progress-fill { background: var(--db-danger); }
+
+/* ============================================================
+ * Table
+ * ========================================================== */
+.db-ui-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--db-bg);
+    border: 1px solid var(--db-border);
+    border-radius: var(--db-radius);
+    overflow: hidden;
+}
+.db-ui-table thead th {
+    background: var(--db-bg-subtle);
+    color: var(--db-text);
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    border-bottom: 1px solid var(--db-border);
+}
+.db-ui-table tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--db-border-light);
+    vertical-align: middle;
+}
+.db-ui-table tbody tr:last-child td { border-bottom: 0; }
+.db-ui-table tbody tr:hover { background: var(--db-bg-hover); }
+.db-ui-row-muted { opacity: .55; }
+.db-ui-row-muted:hover { background: transparent; }
+
+/* ============================================================
+ * Alerts
+ * ========================================================== */
+.db-ui-alert {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border-radius: var(--db-radius-sm);
+    border: 1px solid var(--db-border);
+    background: var(--db-bg-subtle);
+    color: var(--db-text);
+    margin: 0 0 14px;
+    line-height: 1.5;
+}
+.db-ui-alert-icon {
+    flex: 0 0 auto;
+    font-size: 16px;
+    line-height: 1.4;
+}
+.db-ui-alert-info    { background: var(--db-primary-light); border-color: var(--db-primary);      color: var(--db-primary-hover); }
+.db-ui-alert-success { background: var(--db-success-light); border-color: var(--db-success);      color: var(--db-success); }
+.db-ui-alert-warning { background: var(--db-warning-light); border-color: var(--db-warning);      color: var(--db-warning-dark); }
+.db-ui-alert-danger  { background: var(--db-danger-light);  border-color: var(--db-danger);       color: var(--db-danger); }
+
+/* ============================================================
+ * Stat box
+ * ========================================================== */
+.db-ui-stat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--db-bg);
+    border: 1px solid var(--db-border);
+    border-radius: var(--db-radius);
+    margin: 0 0 8px;
+}
+.db-ui-stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--db-radius-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    background: var(--db-bg-subtle);
+    color: var(--db-text-muted);
+    flex: 0 0 auto;
+}
+.db-ui-stat-icon-primary { background: var(--db-primary-light); color: var(--db-primary-hover); }
+.db-ui-stat-icon-success { background: var(--db-success-light); color: var(--db-success); }
+.db-ui-stat-icon-warning { background: var(--db-warning-light); color: var(--db-warning-dark); }
+.db-ui-stat-icon-danger  { background: var(--db-danger-light);  color: var(--db-danger); }
+.db-ui-stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--db-text);
+}
+.db-ui-stat-label {
+    font-size: 12px;
+    color: var(--db-text-muted);
+    line-height: 1.4;
+}
+
+/* ============================================================
+ * Tooltip (semplice CSS-only)
+ * ========================================================== */
+.db-ui-tip { position: relative; }
+.db-ui-tip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--db-text);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: var(--db-radius-sm);
+    font-size: 11px;
+    line-height: 1.3;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--db-transition);
+    z-index: 99;
+}
+.db-ui-tip:hover::after,
+.db-ui-tip:focus-visible::after { opacity: 1; }
+
+/* ============================================================
+ * Drag & drop
+ * ========================================================== */
+.db-ui-drag-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--db-bg);
+    border: 1px solid var(--db-border);
+    border-radius: var(--db-radius-sm);
+    margin: 0 0 6px;
+    transition: background var(--db-transition);
+}
+.db-ui-drag-item:hover { background: var(--db-bg-hover); }
+.db-ui-drag-handle {
+    cursor: grab;
+    color: var(--db-text-light);
+    font-size: 16px;
+    user-select: none;
+}
+.db-ui-drag-remove {
+    margin-left: auto;
+    border: 0;
+    background: transparent;
+    color: var(--db-danger);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: var(--db-radius-sm);
+}
+.db-ui-drag-remove:hover { background: var(--db-danger-light); }
+
+/* ============================================================
+ * Feedback (large status block)
+ * ========================================================== */
+.db-ui-feedback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    padding: 32px 20px;
+    border-radius: var(--db-radius-lg);
+    background: var(--db-bg-subtle);
+    border: 1px solid var(--db-border);
+    margin: 0 0 16px;
+}
+.db-ui-feedback-icon { font-size: 42px; line-height: 1; }
+.db-ui-feedback-title { font-size: 18px; font-weight: 700; color: var(--db-text); }
+.db-ui-feedback-text  { font-size: 14px; color: var(--db-text-muted); }
+.db-ui-feedback-success { background: var(--db-success-light); border-color: var(--db-success); }
+.db-ui-feedback-success .db-ui-feedback-title { color: var(--db-success); }
+.db-ui-feedback-warning { background: var(--db-warning-light); border-color: var(--db-warning); }
+.db-ui-feedback-warning .db-ui-feedback-title { color: var(--db-warning-dark); }
+.db-ui-feedback-error   { background: var(--db-danger-light);  border-color: var(--db-danger); }
+.db-ui-feedback-error .db-ui-feedback-title { color: var(--db-danger); }
+
+/* ============================================================
+ * Empty state
+ * ========================================================== */
+.db-ui-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    padding: 36px 18px;
+    color: var(--db-text-muted);
+    background: var(--db-bg-subtle);
+    border: 1px dashed var(--db-border);
+    border-radius: var(--db-radius);
+    font-size: 13px;
+}
+.db-ui-empty-icon { font-size: 32px; line-height: 1; opacity: .7; }
+
+/* ============================================================
+ * Separator
+ * ========================================================== */
+.db-ui-sep {
+    border: 0;
+    border-top: 1px solid var(--db-border-light);
+    margin: 16px 0;
+}
+
+/* ============================================================
+ * Form helpers
+ * ========================================================== */
+.db-ui-field {
+    margin: 0 0 14px;
+}
+.db-ui-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--db-text);
+}
+.db-ui-field-help {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--db-text-muted);
+}
+.db-ui-field input[type="text"],
+.db-ui-field input[type="url"],
+.db-ui-field input[type="email"],
+.db-ui-field input[type="number"],
+.db-ui-field select,
+.db-ui-field textarea {
+    width: 100%;
+    max-width: 560px;
+}
+
+/* ============================================================
+ * Responsive
+ * ========================================================== */
+@media (max-width: 782px) {
+    .db-ui-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .db-ui-table thead { display: none; }
+    .db-ui-table, .db-ui-table tbody, .db-ui-table tr, .db-ui-table td {
+        display: block;
+        width: 100%;
+    }
+    .db-ui-table tbody td {
+        border: 0;
+        border-bottom: 1px solid var(--db-border-light);
+        padding: 8px 12px;
+    }
+}
+
+/* ============================================================
+ * Reduced motion / High contrast
+ * ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+    .db-ui-card,
+    .db-ui-btn,
+    .db-ui-progress-fill,
+    .db-ui-tip::after,
+    .db-ui-drag-item {
+        transition: none;
+    }
+}
+
+@media (forced-colors: active) {
+    .db-ui-card,
+    .db-ui-btn,
+    .db-ui-badge,
+    .db-ui-table,
+    .db-ui-alert,
+    .db-ui-stat,
+    .db-ui-feedback,
+    .db-ui-empty,
+    .db-ui-drag-item {
+        border: 1px solid CanvasText;
+    }
+}

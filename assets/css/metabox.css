@@ -1,0 +1,257 @@
+/* DB SEO Manager — Metabox styles
+ * Stili minimali e self-contained. Useranno le CSS variables del design
+ * system DB Admin UI quando questo verrà aggiunto allo step 6.
+ *
+ * Nessuna importazione esterna, nessun font remoto.
+ */
+
+.dbseo-metabox {
+    --dbseo-good: #16a34a;
+    --dbseo-warn: #d97706;
+    --dbseo-bad:  #dc2626;
+    --dbseo-bg:   #f9fafb;
+    --dbseo-border: #d1d5db;
+    --dbseo-text-muted: #6b7280;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ---------------- Tabs ---------------- */
+.dbseo-tabs {
+    display: flex;
+    gap: 0;
+    margin: 0 0 16px;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--dbseo-border);
+}
+.dbseo-tabs li {
+    margin: 0;
+    padding: 0;
+}
+.dbseo-tab {
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    padding: 8px 14px;
+    margin: 0;
+    cursor: pointer;
+    font: inherit;
+    color: var(--dbseo-text-muted);
+    transition: color .15s, border-color .15s;
+}
+.dbseo-tab:hover,
+.dbseo-tab:focus-visible {
+    color: #111827;
+    outline: none;
+}
+.dbseo-tab.is-active {
+    color: #111827;
+    border-bottom-color: #2563eb;
+    font-weight: 600;
+}
+
+.dbseo-tab-panel {
+    display: none;
+}
+.dbseo-tab-panel.is-active {
+    display: block;
+}
+
+/* ---------------- SERP preview ---------------- */
+.dbseo-serp-preview {
+    background: #fff;
+    border: 1px solid var(--dbseo-border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 0 0 16px;
+    max-width: 600px;
+}
+.dbseo-serp-url {
+    color: #4d5156;
+    font-size: 12px;
+    line-height: 1.4;
+    word-break: break-all;
+}
+.dbseo-serp-title {
+    color: #1a0dab;
+    font-size: 18px;
+    line-height: 1.3;
+    margin: 4px 0 6px;
+    font-weight: 400;
+    word-break: break-word;
+}
+.dbseo-serp-desc {
+    color: #4d5156;
+    font-size: 13px;
+    line-height: 1.5;
+    word-break: break-word;
+    min-height: 1.5em;
+}
+
+/* ---------------- Form fields ---------------- */
+.dbseo-metabox label {
+    display: block;
+    margin-bottom: 4px;
+}
+.dbseo-metabox p {
+    margin: 0 0 14px;
+}
+.dbseo-metabox h4 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--dbseo-text-muted);
+}
+.dbseo-metabox fieldset {
+    border: 1px solid var(--dbseo-border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 0 0 14px;
+}
+.dbseo-metabox fieldset legend {
+    padding: 0 6px;
+    font-weight: 600;
+}
+.dbseo-metabox fieldset label {
+    display: inline-block;
+    margin: 4px 0;
+}
+.dbseo-metabox hr {
+    margin: 18px 0;
+    border: 0;
+    border-top: 1px solid var(--dbseo-border);
+}
+
+/* ---------------- Counter ---------------- */
+.dbseo-counter {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+.dbseo-counter.is-good   { background: #ecfdf5; color: var(--dbseo-good); }
+.dbseo-counter.is-short  { background: #fffbeb; color: var(--dbseo-warn); }
+.dbseo-counter.is-long   { background: #fef2f2; color: var(--dbseo-bad); }
+.dbseo-counter.is-neutral{ background: #f3f4f6; color: var(--dbseo-text-muted); }
+
+/* ---------------- Image picker ---------------- */
+.dbseo-image-picker {
+    margin: 0 0 14px;
+}
+.dbseo-image-preview {
+    margin: 6px 0;
+    min-height: 0;
+}
+.dbseo-image-preview img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid var(--dbseo-border);
+}
+
+/* ---------------- Analysis results ---------------- */
+.dbseo-loading,
+.dbseo-error {
+    color: var(--dbseo-text-muted);
+    font-style: italic;
+}
+.dbseo-error {
+    color: var(--dbseo-bad);
+    font-style: normal;
+}
+
+.dbseo-analysis-results {
+    margin-top: 14px;
+}
+
+.dbseo-score {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-weight: 700;
+}
+.dbseo-score.is-good { background: #ecfdf5; color: var(--dbseo-good); }
+.dbseo-score.is-warn { background: #fffbeb; color: var(--dbseo-warn); }
+.dbseo-score.is-bad  { background: #fef2f2; color: var(--dbseo-bad); }
+.dbseo-score__value { font-size: 32px; line-height: 1; }
+.dbseo-score__label { font-size: 14px; opacity: .7; }
+
+.dbseo-metrics {
+    list-style: none;
+    margin: 0 0 14px;
+    padding: 12px 14px;
+    background: var(--dbseo-bg);
+    border-radius: 6px;
+    font-size: 12px;
+}
+.dbseo-metrics li {
+    margin: 0;
+    padding: 3px 0;
+}
+
+.dbseo-checks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.dbseo-check {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 6px 10px;
+    padding: 10px 12px;
+    margin: 0 0 6px;
+    border-radius: 6px;
+    border-left: 3px solid transparent;
+    background: #fff;
+    border: 1px solid var(--dbseo-border);
+}
+.dbseo-check.is-good { border-left-color: var(--dbseo-good); }
+.dbseo-check.is-warn { border-left-color: var(--dbseo-warn); }
+.dbseo-check.is-bad  { border-left-color: var(--dbseo-bad); }
+
+.dbseo-check__icon {
+    grid-row: 1 / span 2;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 2px;
+}
+.dbseo-check.is-good .dbseo-check__icon { background: var(--dbseo-good); }
+.dbseo-check.is-warn .dbseo-check__icon { background: var(--dbseo-warn); }
+.dbseo-check.is-bad  .dbseo-check__icon { background: var(--dbseo-bad); }
+
+.dbseo-check__label {
+    font-weight: 600;
+}
+.dbseo-check__msg {
+    grid-column: 2;
+    color: var(--dbseo-text-muted);
+    font-size: 12px;
+}
+
+/* ---------------- Reduced motion / High contrast ---------------- */
+@media (prefers-reduced-motion: reduce) {
+    .dbseo-tab { transition: none; }
+}
+
+@media (forced-colors: active) {
+    .dbseo-counter,
+    .dbseo-score,
+    .dbseo-check {
+        border: 1px solid CanvasText;
+    }
+}

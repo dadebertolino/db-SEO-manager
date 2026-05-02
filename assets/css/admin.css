@@ -1,0 +1,55 @@
+/**
+ * DB SEO Manager — Admin CSS plugin-specific.
+ * Estende il design system db-admin-ui.css con regole proprie del plugin.
+ * Usa SOLO CSS variables --db-* (mai colori hardcoded).
+ */
+
+.dbseo-wrap {
+    max-width: 1200px;
+}
+
+/* ---------------- Dashboard grid ---------------- */
+.dbseo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin: 0 0 20px;
+}
+
+.dbseo-dash-card {
+    text-decoration: none;
+    color: var(--db-text);
+    transition: transform var(--db-transition), box-shadow var(--db-transition);
+}
+.dbseo-dash-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--db-shadow-md);
+    color: var(--db-text);
+}
+.dbseo-dash-card:focus-visible {
+    outline: 2px solid var(--db-primary);
+    outline-offset: 2px;
+}
+
+/* ---------------- Form layout ---------------- */
+.dbseo-form .db-ui-card { margin-bottom: 14px; }
+
+/* Inputs full width all'interno delle card */
+.dbseo-form .db-ui-field input[type="text"],
+.dbseo-form .db-ui-field input[type="url"],
+.dbseo-form .db-ui-field input[type="email"],
+.dbseo-form .db-ui-field input[type="number"],
+.dbseo-form .db-ui-field select,
+.dbseo-form .db-ui-field textarea {
+    max-width: 640px;
+}
+
+/* ---------------- Image field (riusa metabox styles) ---------------- */
+.dbseo-image-field .dbseo-image-preview {
+    margin: 6px 0;
+}
+
+/* ---------------- Reduced motion ---------------- */
+@media (prefers-reduced-motion: reduce) {
+    .dbseo-dash-card { transition: none; }
+}
