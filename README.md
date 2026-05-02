@@ -204,9 +204,23 @@ Or in the block editor: **DB SEO → Breadcrumbs**.
 
 ## Changelog
 
-### 1.2.2 — Removed duplicated menu voices
+### 1.3.0 — Privacy moved to DB Privacy Hub _(2026)_ ⚠️ Breaking change
 
-### 1.2.1 — Fixed Out of memory error
+The privacy register and the unified processing UI have been **extracted into a dedicated plugin**: [DB Privacy Hub](https://www.davidebertolino.it/progetti/db-privacy-hub/). This plugin focuses on its core responsibility (SEO).
+
+Migration:
+- The "Privacy SEO" admin page has been removed (now: `Privacy → Registro trattamenti` in DB Privacy Hub)
+- The legacy filter `dbseo_processing_register` is no longer emitted by SEO Manager but DB Privacy Hub still listens to it for retro-compat with third-party plugins
+- The class `DBSEO_Privacy` has been removed
+- **WP Privacy Tools integration retained**: the exporter and eraser for SEO post meta (15 keys: `_dbseo_title`, `_dbseo_description`, OpenGraph, Twitter, robots, focus keyword, score, cornerstone, schema type) live in the new isolated module `DBSEO_WP_Privacy_Tools`. They register through DB Privacy Hub's `dbph_user_data_exporters` / `dbph_user_data_erasers` filters when the Hub is installed, and fall back to the WordPress core filters when standalone — no loss of GDPR compliance either way.
+- Existing dashboards/cards referencing "Privacy SEO" have been removed
+- An admin notice suggests installing DB Privacy Hub on first load after upgrade
+
+What's NOT removed: the `Hard Privacy` page and the `Stato GDPR` page — both belong to SEO concerns (anti-fingerprinting, third-party audit) and stay where they are.
+
+### 1.2.2 — Bugfix manual release _(2026)_
+
+Internal bugfixes by the maintainer (not formally released).
 
 ### 1.2.0 — Cookie Manager Alignment
 

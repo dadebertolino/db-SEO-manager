@@ -76,7 +76,6 @@ class DBSEO_Settings {
             'verify'    => array(__('Verifiche',          'db-seo-manager'), 'render_verify'),
             'hardening' => array(__('Hard Privacy',       'db-seo-manager'), 'render_hardening'),
             'status'    => array(__('Stato GDPR',         'db-seo-manager'), 'render_status'),
-            'privacy'   => array(__('Privacy SEO',        'db-seo-manager'), 'render_privacy'),
         );
 
         foreach ($subpages as $slug => $cfg) {
@@ -209,7 +208,7 @@ class DBSEO_Settings {
         <div class="db-ui-alert db-ui-alert-info">
             <span class="db-ui-alert-icon" aria-hidden="true">ℹ️</span>
             <span><?php esc_html_e(
-                'Tutte le integrazioni con servizi esterni sono disattivate per default. Attiva solo ciò che ti serve, dopo aver letto la sezione "Privacy SEO".',
+                'Tutte le integrazioni con servizi esterni sono disattivate per default. Attiva solo ciò che ti serve. Per la gestione completa della privacy installa il plugin DB Privacy Hub.',
                 'db-seo-manager'
             ); ?></span>
         </div>
@@ -224,7 +223,6 @@ class DBSEO_Settings {
                 array(__('Redirect',       'db-seo-manager'), 'redirects',  (bool) $core->get('redirects_enabled'), __('301/302/307/410 con conteggio aggregato.', 'db-seo-manager')),
                 array(__('Errori 404',     'db-seo-manager'), 'log404',     (bool) $core->get('monitor_404_enabled'), __('Monitor anonimo, nessun IP loggato.', 'db-seo-manager')),
                 array(__('Analytics',      'db-seo-manager'), 'analytics',  (bool) $core->get('analytics_enabled'), __('Snippet emessi solo dopo consenso.', 'db-seo-manager')),
-                array(__('Privacy SEO',    'db-seo-manager'), 'privacy',    true,  __('Registro dei trattamenti tecnici attivi.', 'db-seo-manager')),
             );
             foreach ($cards as $c) :
                 list($label, $slug, $active, $desc) = $c;
@@ -1077,115 +1075,6 @@ class DBSEO_Settings {
         $this->close_wrap();
     }
 
-    /* =====================================================================
-     * PRIVACY SEO — registro trattamenti
-     * ================================================================== */
-
-    public function render_privacy() {
-        $this->open_wrap(__('Privacy SEO — Registro trattamenti', 'db-seo-manager'),
-            __('Elenco dei trattamenti tecnici attualmente attivi sul sito, derivati dalle impostazioni del plugin.', 'db-seo-manager'));
-
-        $module = DBSEO_Core::instance()->module('privacy');
-        if (!$module) {
-            echo '<div class="db-ui-alert db-ui-alert-warning">' .
-                 esc_html__('Modulo privacy non disponibile.', 'db-seo-manager') . '</div>';
-            $this->close_wrap();
-            return;
-        }
-        $register = $module->get_processing_register();
-        ?>
-        <div class="db-ui-alert db-ui-alert-info">
-            <span class="db-ui-alert-icon" aria-hidden="true">ℹ️</span>
-            <span><?php esc_html_e(
-                'Questo è un registro tecnico interno: il plugin NON è il titolare del trattamento. Usa queste informazioni come base per la tua informativa privacy.',
-                'db-seo-manager'
-            ); ?></span>
-        </div>
-
-        <?php
-        // Conta le voci dichiarate da plugin esterni via filter
-        // dbseo_processing_register, così possiamo segnalarlo nell'intestazione.
-        $external_count = 0;
-        foreach ($register as $entry) {
-            if (isset($entry['_source']) && $entry['_source'] === 'external') {
-                $external_count++;
-            }
-        }
-        if ($external_count > 0) :
-        ?>
-        <div class="db-ui-alert db-ui-alert-info" style="margin-top:8px">
-            <span class="db-ui-alert-icon" aria-hidden="true">🔌</span>
-            <span><?php
-                printf(
-                    /* translators: %d: numero di trattamenti dichiarati da plugin esterni */
-                    esc_html(_n(
-                        'Trattamento dichiarato da %d altro plugin DB tramite il filter dbseo_processing_register. Le voci marcate "Plugin esterno" sono di responsabilità del plugin che le dichiara.',
-                        'Trattamenti dichiarati da %d altri plugin DB tramite il filter dbseo_processing_register. Le voci marcate "Plugin esterno" sono di responsabilità del plugin che le dichiara.',
-                        $external_count,
-                        'db-seo-manager'
-                    )),
-                    (int) $external_count
-                );
-            ?></span>
-        </div>
-        <?php endif; ?>
-
-        <?php foreach ($register as $entry) :
-            $is_external = isset($entry['_source']) && $entry['_source'] === 'external';
-        ?>
-            <div class="db-ui-card">
-                <div class="db-ui-card-header" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
-                    <h3 style="margin:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-                        <?php echo esc_html($entry['label']); ?>
-                        <?php if ($is_external) : ?>
-                            <span class="db-ui-badge db-ui-badge-primary"
-                                  title="<?php esc_attr_e('Voce dichiarata da un altro plugin DB tramite il filter dbseo_processing_register.', 'db-seo-manager'); ?>"
-                                  style="font-size:11px;font-weight:normal">
-                                🔌 <?php esc_html_e('Plugin esterno', 'db-seo-manager'); ?>
-                            </span>
-                        <?php endif; ?>
-                    </h3>
-                    <span class="db-ui-badge <?php echo $entry['status'] === 'active' ? 'db-ui-badge-success' : 'db-ui-badge-muted'; ?>">
-                        <?php echo $entry['status'] === 'active' ? esc_html__('Attivo', 'db-seo-manager') : esc_html__('Disattivo', 'db-seo-manager'); ?>
-                    </span>
-                </div>
-                <div class="db-ui-card-body">
-                    <p><strong><?php esc_html_e('Finalità:', 'db-seo-manager'); ?></strong> <?php echo esc_html($entry['purpose']); ?></p>
-                    <p><strong><?php esc_html_e('Base giuridica:', 'db-seo-manager'); ?></strong> <?php echo esc_html($entry['legal_basis']); ?></p>
-                    <p><strong><?php esc_html_e('Dati raccolti:', 'db-seo-manager'); ?></strong> <?php echo esc_html($entry['data_collected']); ?></p>
-                    <p><strong><?php esc_html_e('Conservazione:', 'db-seo-manager'); ?></strong> <?php echo esc_html($entry['retention']); ?></p>
-                    <p style="margin-bottom:0"><strong><?php esc_html_e('Trasferimenti:', 'db-seo-manager'); ?></strong> <?php echo esc_html($entry['transfers']); ?></p>
-                </div>
-            </div>
-        <?php endforeach; ?>
-
-        <p style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-            <a href="<?php echo esc_url(admin_url('options-privacy.php')); ?>" class="db-ui-btn">
-                <?php esc_html_e('Vai alla Guida policy di WordPress →', 'db-seo-manager'); ?>
-            </a>
-
-            <?php
-            $export_url_json = wp_nonce_url(
-                admin_url('admin-post.php?action=dbseo_export_register&format=json'),
-                'dbseo_export_register',
-                '_dbseo_export_nonce'
-            );
-            $export_url_html = wp_nonce_url(
-                admin_url('admin-post.php?action=dbseo_export_register&format=html'),
-                'dbseo_export_register',
-                '_dbseo_export_nonce'
-            );
-            ?>
-            <a href="<?php echo esc_url($export_url_json); ?>" class="db-ui-btn">
-                <?php esc_html_e('Esporta JSON', 'db-seo-manager'); ?>
-            </a>
-            <a href="<?php echo esc_url($export_url_html); ?>" class="db-ui-btn" target="_blank" rel="noopener">
-                <?php esc_html_e('Stampa / PDF', 'db-seo-manager'); ?>
-            </a>
-        </p>
-        <?php
-        $this->close_wrap();
-    }
 
     /* =====================================================================
      * Field renderers
