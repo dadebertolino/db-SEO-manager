@@ -20,6 +20,11 @@
 - **Live SERP preview** — real-time Google-style preview in the post editor with character counters
 - **IndexNow** — server-to-server URL submission to Bing/Yandex on publish/update. No user data involved.
 - **Importer** — batch migration from Yoast SEO, Rank Math, All in One SEO with preserve/replace modes
+- **Term SEO** — per-term title, meta description, canonical and noindex for categories, tags and custom taxonomies
+- **Hreflang** — manual per-post language alternates with automatic self-reference, plus a filter for Polylang/WPML integration
+- **Duplicate content report** — site-wide detection of duplicate SEO titles, meta descriptions and post titles
+- **FAQ & HowTo schema** — `[dbseo_faq]` / `[dbseo_howto]` shortcodes with accessible markup and automatic JSON-LD
+- **Redirect CSV import/export** — bulk migration of redirect rules, inline rule editing, one-click redirect creation from the 404 log
 - **GitHub auto-updates** — receive updates in the WordPress admin like any wp.org plugin
 
 ### GDPR & privacy
@@ -28,6 +33,9 @@
 - **Google Consent Mode v2** — emits `denied` defaults as the first script on the page when GA4/GTM is enabled
 - **Hard Privacy mode** — global toggle that suppresses all external integrations and applies anti-fingerprinting hardening: emoji script strip, oEmbed strip, DNS prefetch strip, Gravatar replacement with inline SVG, optional Google Fonts strip, XML-RPC disable, REST users endpoint protection
 - **Third-party audit** — on-demand homepage scan that identifies external resources by category (analytics, advertising, fonts, embeds, captchas, CDNs) and consent requirement, against a catalog of 30+ known hosts
+- **Scheduled audit with alerts** — weekly automatic scan with email notification when a new external host appears (privacy regression monitoring; one alert per host)
+- **AI crawler control** — selectively block known AI crawlers (GPTBot, ClaudeBot, Google-Extended, PerplexityBot, CCBot, Bytespider and more) via robots.txt; nothing blocked by default
+- **llms.txt** — optional virtual llms.txt (llmstxt.org spec) with site info, key pages and custom Markdown
 - **GDPR status dashboard** — synthetic 0-100 score with breakdown of contributing factors and live module status
 - **Auto-generated privacy register** — dynamic list of active technical processings with legal basis, retention, extra-EU transfer notes
 - **Register export** — JSON for compliance tooling, print-ready HTML for browser-native PDF (no embedded library)
@@ -278,3 +286,39 @@ La pagina **Hard Privacy** è una modalità avanzata che disabilita in blocco le
 La pagina **Stato GDPR** mostra un punteggio sintetico 0-100 calcolato sulle impostazioni attive, e include un audit on-demand che analizza la homepage del sito per identificare quali risorse di terze parti vengono effettivamente caricate dal tema e dagli altri plugin (analytics, advertising, font, embed, captcha, CDN). Quando il DB Cookie Manager 3.0.2+ è installato, l'audit arricchisce ogni host noto con i cookie effettivamente rilevati dallo scanner del Cookie Manager, mostrandoli in una colonna "🍪 Cookie scritti". Il registro privacy è esportabile in JSON e in HTML stampabile (PDF nativo del browser, senza librerie embedded), e accoglie automaticamente i trattamenti dichiarati da altri plugin DB tramite il filter `dbseo_processing_register` (badge "Plugin esterno").
 
 La disinstallazione rimuove completamente tutti i dati persistenti. Il plugin segue gli standard di sviluppo dei plugin di Davide Bertolino: auto-aggiornamento da GitHub, design system condiviso, nessuna dipendenza SaaS, accessibilità WCAG 2.1 AA, installabile in 30 secondi.
+
+## Changelog
+
+### 1.4.0 — 2026-07
+
+**Fixes**
+- Redirects to external domains now work: the target host is whitelisted via `allowed_redirect_hosts` at execution time (previously `wp_safe_redirect()` silently fell back to home)
+- Target URL validation on rule creation; empty target now allowed only for 410 rules
+
+**Performance**
+- Sitemap generation no longer uses a `NOT EXISTS` meta_query (heavy postmeta LEFT JOIN on large sites): noindex IDs are read with a cached direct query and merged into `post__not_in`
+- Targeted sitemap cache invalidation: saving a post flushes only that post type's transients instead of the whole sitemap cache
+- Optional "regex rules only on 404" mode: zeroes the regex evaluation cost on normal traffic
+
+**404 monitor hardening**
+- Configurable row cap with least-relevant eviction (anti-flooding from bot scans)
+- Configurable regex exclusion patterns (defaults cover vulnerability probes and static assets)
+- Optional "internal referer only" mode to log real broken links and ignore bot scans
+
+**New features**
+- AI crawler control in robots.txt + virtual llms.txt
+- Term SEO fields (title, description, canonical, noindex) for categories, tags and sitemap taxonomies
+- Manual hreflang metabox with per-line validation and automatic self-reference
+- Duplicate content report (SEO titles, meta descriptions, post titles)
+- FAQ and HowTo shortcodes with automatic JSON-LD (footer-emitted, Google-valid)
+- Redirect CSV import/export, inline rule editing, one-click 301 creation from the 404 log
+- Scheduled weekly third-party audit with email alert on new external hosts
+- Cornerstone content flag now used: priority 1.0 in the XML sitemap
+
+**Infrastructure**
+- GitHub Actions CI (PHP 7.4–8.3 lint + PHPCS report) and release workflow that builds and attaches the plugin ZIP consumed by the auto-updater
+- Multisite-aware uninstall (per-blog tables, options, meta, cron)
+
+## Internationalization
+
+Source strings are intentionally in Italian: the plugin targets Italian sites and the entire admin UI, documentation and legal terminology (GDPR register, legal bases) are written for that audience. A `.pot` file is provided; an English translation can be added as a standard `en_US.po` if needed.

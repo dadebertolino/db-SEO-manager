@@ -75,6 +75,11 @@ class DBSEO_Redirects {
         }
 
         // 2. Match regex.
+        // Opzionale: valuta le regex solo su 404 per azzerare il costo sul
+        // traffico normale (le regole esatte via hash restano sempre attive).
+        if (DBSEO_Core::instance()->get('redirects_regex_only_404') && !is_404()) {
+            return;
+        }
         if (!empty($rules['regex'])) {
             foreach ($rules['regex'] as $rule) {
                 $pattern = $rule['source'];
@@ -125,8 +130,20 @@ class DBSEO_Redirects {
 
         // Anti-loop: se il target coincide con la richiesta, abort.
         $target_path = wp_parse_url($target, PHP_URL_PATH);
-        if ($target_path && rtrim($target_path, '/') === rtrim(strtok($request, '?'), '/')) {
+        $target_host = wp_parse_url($target, PHP_URL_HOST);
+        $is_internal = ($target_host === null) || (strtolower($target_host) === strtolower((string) wp_parse_url(home_url(), PHP_URL_HOST)));
+        if ($is_internal && $target_path && rtrim($target_path, '/') === rtrim(strtok($request, '?'), '/')) {
             return;
+        }
+
+        // Redirect esterni: wp_safe_redirect() blocca gli host non in whitelist
+        // e ripiegherebbe silenziosamente sulla home. Autorizziamo l'host del
+        // target — è stato validato e salvato esplicitamente dall'admin.
+        if (!$is_internal && $target_host) {
+            add_filter('allowed_redirect_hosts', function ($hosts) use ($target_host) {
+                $hosts[] = $target_host;
+                return array_unique($hosts);
+            });
         }
 
         wp_safe_redirect(esc_url_raw($target), $type, 'DB SEO Manager');
@@ -201,7 +218,10 @@ class DBSEO_Redirects {
         $source = $this->normalize_source($source);
         $target = trim($target);
 
-        if ($source === '' || $target === '') return new WP_Error('invalid', __('Origine e destinazione sono obbligatorie.', 'db-seo-manager'));
+        if ($source === '' || ($target === '' && (int) $type !== 410)) return new WP_Error('invalid', __('Origine e destinazione sono obbligatorie.', 'db-seo-manager'));
+        if ($target !== '' && strpos($target, 'http') === 0 && !wp_http_validate_url($target)) {
+            return new WP_Error('invalid_target', __('URL di destinazione non valida.', 'db-seo-manager'));
+        }
         if (!in_array((int) $type, array(301, 302, 307, 410), true)) {
             return new WP_Error('invalid_type', __('Codice di redirect non valido.', 'db-seo-manager'));
         }

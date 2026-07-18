@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ZIP & attach to Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build plugin ZIP
+        run: |
+          PLUGIN=db-seo-manager
+          mkdir -p build/$PLUGIN
+          rsync -a --exclude='.git*' --exclude='build' --exclude='.github' ./ build/$PLUGIN/
+          cd build && zip -r ../$PLUGIN.zip $PLUGIN
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: db-seo-manager.zip
+          generate_release_notes: true

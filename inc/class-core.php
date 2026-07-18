@@ -130,9 +130,13 @@ class DBSEO_Core {
 
             // -- Redirect & 404 --
             'redirects_enabled'      => true,
+            'redirects_regex_only_404' => false,      // Se true, le regole regex girano solo su 404 (costo zero sul traffico normale).
             'monitor_404_enabled'    => false,        // OFF di default (anche se anonimo)
             'monitor_404_log_ip'     => false,        // MAI consigliato. Resta off.
             'monitor_404_keep_days'  => 30,           // Auto-pulizia log.
+            'monitor_404_max_rows'   => 5000,         // Tetto anti-flooding: oltre, eviction dei più vecchi.
+            'monitor_404_internal_referer_only' => false, // Se true, logga solo 404 con referer interno al sito.
+            'monitor_404_exclude_patterns' => "\.php$\n\.env\n\.git\nwp-content/\nwp-includes/\n\.(jpe?g|png|gif|webp|svg|ico|css|js|map|woff2?)$", // Regex per riga, case-insensitive.
 
             // -- robots.txt virtuale --
             'robots_txt_custom'      => '',
@@ -159,6 +163,17 @@ class DBSEO_Core {
             // -- Cache audit terze parti --
             'audit_last_run'         => 0,
             'audit_last_results'     => array(),
+
+            // -- Audit schedulato (monitoraggio regressioni privacy) --
+            'audit_schedule_enabled' => false,
+            'audit_alert_email'      => '',           // Vuoto = admin_email.
+            'audit_known_baseline'   => array(),      // Host esterni già noti/accettati.
+
+            // -- Crawler AI (robots.txt) + llms.txt --
+            // Nessun bot bloccato di default: scelta esplicita dell'admin.
+            'ai_bots_block'          => array(),      // Slug da DBSEO_AI_Robots::bots().
+            'llms_txt_enabled'       => false,
+            'llms_txt_custom'        => '',
 
             // -- Verifiche search engine (solo meta tag) --
             'verify_google'          => '',
@@ -248,6 +263,11 @@ class DBSEO_Core {
             'inc/class-analyzer.php',
             'inc/class-hardening.php',
             'inc/class-audit.php',
+            'inc/class-ai-robots.php',
+            'inc/class-term-seo.php',
+            'inc/class-hreflang.php',
+            'inc/class-duplicates.php',
+            'inc/class-redirects-io.php',
             'inc/class-settings.php',
         );
         foreach ($files as $rel) {
@@ -277,6 +297,11 @@ class DBSEO_Core {
             'analyzer'     => 'DBSEO_Analyzer',
             'hardening'    => 'DBSEO_Hardening',
             'audit'        => 'DBSEO_Audit',
+            'ai_robots'    => 'DBSEO_AI_Robots',
+            'term_seo'     => 'DBSEO_Term_SEO',
+            'hreflang'     => 'DBSEO_Hreflang',
+            'duplicates'   => 'DBSEO_Duplicates',
+            'redirects_io' => 'DBSEO_Redirects_IO',
             'settings'     => 'DBSEO_Settings',
         );
 

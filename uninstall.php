@@ -16,6 +16,13 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 
 global $wpdb;
 
+/**
+ * Pulizia per singolo sito: tabelle, opzioni, meta, transient, cron.
+ * Estratta in funzione per poter iterare i blog in multisite.
+ */
+function dbseo_uninstall_site() {
+    global $wpdb;
+
 /* -------------------------------------------------------------------------
  * Tabelle custom
  * ---------------------------------------------------------------------- */
@@ -39,6 +46,7 @@ delete_site_option('dbseo_settings');
  * Meta su post / term
  * ---------------------------------------------------------------------- */
 $meta_keys = array(
+    '_dbseo_hreflang',
     '_dbseo_title',
     '_dbseo_description',
     '_dbseo_canonical',
@@ -83,3 +91,21 @@ $wpdb->delete($wpdb->usermeta, array('meta_key' => 'dbseo_privacy_hub_notice_dis
 wp_clear_scheduled_hook('dbseo_cron_broken_links');
 wp_clear_scheduled_hook('dbseo_cron_indexnow_flush');
 wp_clear_scheduled_hook('dbseo_cron_404_cleanup');
+wp_clear_scheduled_hook('dbseo_cron_audit');
+}
+
+/* -------------------------------------------------------------------------
+ * Esecuzione: multisite-aware.
+ * In una network, il plugin può essere stato attivato su più siti: iteriamo
+ * tutti i blog e puliamo ciascuno con il proprio prefisso tabelle.
+ * ---------------------------------------------------------------------- */
+if (is_multisite()) {
+    $site_ids = get_sites(array('fields' => 'ids', 'number' => 0));
+    foreach ($site_ids as $site_id) {
+        switch_to_blog($site_id);
+        dbseo_uninstall_site();
+        restore_current_blog();
+    }
+} else {
+    dbseo_uninstall_site();
+}

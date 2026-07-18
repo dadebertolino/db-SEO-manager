@@ -143,6 +143,14 @@ class DBSEO_Settings {
             '404_cleared'   => array('success', __('Log 404 svuotato.', 'db-seo-manager')),
             '404_deleted'   => array('success', __('Voce 404 eliminata.', 'db-seo-manager')),
             'audit_done'    => array('success', __('Audit completato.', 'db-seo-manager')),
+            'redirect_updated' => array('success', __('Redirect aggiornato.', 'db-seo-manager')),
+            'import_no_file'   => array('error',   __('Nessun file CSV selezionato.', 'db-seo-manager')),
+            'import_done'      => array('success', sprintf(
+                /* translators: 1: imported count, 2: skipped count */
+                __('Import completato: %1$d redirect importati, %2$d saltati (duplicati o non validi).', 'db-seo-manager'),
+                isset($_GET['dbseo_imported']) ? (int) $_GET['dbseo_imported'] : 0,
+                isset($_GET['dbseo_skipped'])  ? (int) $_GET['dbseo_skipped']  : 0
+            )),
         );
         if (!isset($messages[$msg])) return;
 
@@ -447,6 +455,40 @@ class DBSEO_Settings {
                 </p>
             </div>
         </div>
+
+        <div class="db-ui-card">
+            <div class="db-ui-card-header"><h3><?php esc_html_e('Crawler AI', 'db-seo-manager'); ?></h3></div>
+            <div class="db-ui-card-body">
+                <p class="description" style="margin-top:0">
+                    <?php esc_html_e('Blocca selettivamente i crawler AI via robots.txt (Disallow: /). Nessun bot è bloccato di default: è una scelta editoriale. Nota: robots.txt è una richiesta, non una barriera tecnica.', 'db-seo-manager'); ?>
+                </p>
+                <fieldset class="db-ui-field">
+                    <?php
+                    $blocked = (array) ($s['ai_bots_block'] ?? array());
+                    foreach (DBSEO_AI_Robots::bots() as $slug => $bot) : ?>
+                        <label style="display:block;margin:4px 0">
+                            <input type="checkbox" name="dbseo[ai_bots_block][]"
+                                   value="<?php echo esc_attr($slug); ?>"
+                                   <?php checked(in_array($slug, $blocked, true)); ?>>
+                            <?php echo esc_html($bot['label']); ?>
+                            <code><?php echo esc_html($bot['ua']); ?></code>
+                        </label>
+                    <?php endforeach; ?>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="db-ui-card">
+            <div class="db-ui-card-header"><h3><?php esc_html_e('llms.txt', 'db-seo-manager'); ?></h3></div>
+            <div class="db-ui-card-body">
+                <?php $this->checkbox_field('llms_txt_enabled', $s['llms_txt_enabled'] ?? false,
+                    __('Abilita llms.txt virtuale', 'db-seo-manager'),
+                    __('File informativo per gli LLM (spec llmstxt.org): nome sito, descrizione, pagine chiave e testo custom. Servito su /llms.txt se non esiste un file fisico.', 'db-seo-manager')); ?>
+                <?php $this->textarea_field('llms_txt_custom', $s['llms_txt_custom'] ?? '',
+                    __('Testo aggiuntivo (Markdown)', 'db-seo-manager'),
+                    __('Inserito dopo la descrizione del sito.', 'db-seo-manager'), 5); ?>
+            </div>
+        </div>
         <?php
         $this->form_close();
         $this->close_wrap();
@@ -475,12 +517,34 @@ class DBSEO_Settings {
                     <?php $this->checkbox_field('redirects_no_count', $s['redirects_no_count'],
                         __('Non contare gli hit (zero-trust)', 'db-seo-manager'),
                         __('Salta anche il conteggio aggregato. I dati aggregati non sono dati personali, ma alcune policy di privacy zero-trust preferiscono non averne traccia.', 'db-seo-manager')); ?>
+                    <?php $this->checkbox_field('redirects_regex_only_404', $s['redirects_regex_only_404'] ?? false,
+                        __('Valuta le regole regex solo sui 404', 'db-seo-manager'),
+                        __('Le regole esatte restano sempre attive (lookup O(1) via hash). Con molte regex questo azzera il costo sul traffico normale. Da attivare solo se nessuna regex deve intercettare pagine esistenti.', 'db-seo-manager')); ?>
                     <button type="submit" class="db-ui-btn db-ui-btn-primary db-ui-btn-sm">
                         <?php esc_html_e('Salva', 'db-seo-manager'); ?>
                     </button>
                 </div>
             </div>
         </form>
+
+        <div class="db-ui-card">
+            <div class="db-ui-card-header"><h3><?php esc_html_e('Import / Export CSV', 'db-seo-manager'); ?></h3></div>
+            <div class="db-ui-card-body" style="display:flex;gap:16px;align-items:end;flex-wrap:wrap">
+                <a class="db-ui-btn db-ui-btn-sm"
+                   href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=dbseo_redirects_export'), 'dbseo_redirects_io')); ?>">
+                    <?php esc_html_e('Esporta CSV', 'db-seo-manager'); ?>
+                </a>
+                <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" enctype="multipart/form-data" style="display:flex;gap:8px;align-items:end">
+                    <input type="hidden" name="action" value="dbseo_redirects_import">
+                    <?php wp_nonce_field('dbseo_redirects_io'); ?>
+                    <input type="file" name="dbseo_csv" accept=".csv,text/csv" required>
+                    <button type="submit" class="db-ui-btn db-ui-btn-sm db-ui-btn-primary"><?php esc_html_e('Importa CSV', 'db-seo-manager'); ?></button>
+                </form>
+                <p class="description" style="margin:0;flex-basis:100%">
+                    <?php esc_html_e('Formato: source,target,type,is_regex (con header). Le origini già esistenti vengono saltate.', 'db-seo-manager'); ?>
+                </p>
+            </div>
+        </div>
 
         <div class="db-ui-card">
             <div class="db-ui-card-header"><h3><?php esc_html_e('Aggiungi redirect', 'db-seo-manager'); ?></h3></div>
@@ -554,7 +618,28 @@ class DBSEO_Settings {
                             <?php endif; ?>
                         </td>
                         <td><?php echo (int) $r->hits; ?></td>
-                        <td>
+                        <td style="white-space:nowrap">
+                            <details style="display:inline-block;vertical-align:middle;margin-right:6px">
+                                <summary class="db-ui-btn db-ui-btn-sm" style="cursor:pointer;list-style:none"><?php esc_html_e('Modifica', 'db-seo-manager'); ?></summary>
+                                <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
+                                      style="position:absolute;z-index:10;background:#fff;border:1px solid #ccd0d4;border-radius:6px;padding:12px;box-shadow:0 4px 12px rgba(0,0,0,.12);display:grid;gap:8px;min-width:340px">
+                                    <input type="hidden" name="action" value="dbseo_redirect_action">
+                                    <input type="hidden" name="op"     value="update">
+                                    <input type="hidden" name="id"     value="<?php echo (int) $r->id; ?>">
+                                    <?php wp_nonce_field('dbseo_redirect', '_dbseo_redirect_nonce'); ?>
+                                    <input type="text" name="source" value="<?php echo esc_attr($r->source); ?>" aria-label="<?php esc_attr_e('Origine', 'db-seo-manager'); ?>">
+                                    <input type="text" name="target" value="<?php echo esc_attr($r->target); ?>" aria-label="<?php esc_attr_e('Destinazione', 'db-seo-manager'); ?>">
+                                    <div style="display:flex;gap:8px;align-items:center">
+                                        <select name="type">
+                                            <?php foreach (array(301, 302, 307, 410) as $code) : ?>
+                                                <option value="<?php echo (int) $code; ?>" <?php selected((int) $r->type, $code); ?>><?php echo (int) $code; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <label><input type="checkbox" name="is_regex" value="1" <?php checked((int) $r->is_regex, 1); ?>> regex</label>
+                                        <button type="submit" class="db-ui-btn db-ui-btn-sm db-ui-btn-primary"><?php esc_html_e('Salva', 'db-seo-manager'); ?></button>
+                                    </div>
+                                </form>
+                            </details>
                             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline" data-confirm-delete>
                                 <input type="hidden" name="action" value="dbseo_redirect_action">
                                 <input type="hidden" name="op"     value="delete">
@@ -599,6 +684,13 @@ class DBSEO_Settings {
                 <div class="db-ui-card-body">
                     <?php $this->checkbox_field('monitor_404_enabled', $s['monitor_404_enabled'], __('Abilita monitor 404', 'db-seo-manager')); ?>
                     <?php $this->number_field('monitor_404_keep_days', $s['monitor_404_keep_days'], __('Conserva i log per (giorni)', 'db-seo-manager'), 1, 365); ?>
+                    <?php $this->number_field('monitor_404_max_rows', $s['monitor_404_max_rows'] ?? 5000, __('Tetto massimo righe (anti-flooding)', 'db-seo-manager'), 100, 100000); ?>
+                    <?php $this->checkbox_field('monitor_404_internal_referer_only', $s['monitor_404_internal_referer_only'] ?? false,
+                        __('Logga solo 404 con referer interno', 'db-seo-manager'),
+                        __('Registra solo i link rotti reali del sito, ignorando gli scan dei bot (che non inviano referer o arrivano da fuori).', 'db-seo-manager')); ?>
+                    <?php $this->textarea_field('monitor_404_exclude_patterns', $s['monitor_404_exclude_patterns'] ?? '',
+                        __('Pattern da ignorare (regex, una per riga)', 'db-seo-manager'),
+                        __('Case-insensitive. Default: probe di vulnerabilità (.php, .env, .git) e asset statici.', 'db-seo-manager'), 5); ?>
                     <button type="submit" class="db-ui-btn db-ui-btn-primary db-ui-btn-sm"><?php esc_html_e('Salva', 'db-seo-manager'); ?></button>
                 </div>
             </div>
@@ -640,7 +732,20 @@ class DBSEO_Settings {
                             <td><code><?php echo esc_html($r->url); ?></code></td>
                             <td><?php echo (int) $r->count; ?></td>
                             <td><?php echo esc_html($r->last_seen); ?></td>
-                            <td>
+                            <td style="white-space:nowrap">
+                                <details style="display:inline-block;vertical-align:middle;margin-right:6px">
+                                    <summary class="db-ui-btn db-ui-btn-sm db-ui-btn-primary" style="cursor:pointer;list-style:none"><?php esc_html_e('Crea redirect', 'db-seo-manager'); ?></summary>
+                                    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
+                                          style="position:absolute;z-index:10;background:#fff;border:1px solid #ccd0d4;border-radius:6px;padding:12px;box-shadow:0 4px 12px rgba(0,0,0,.12);display:flex;gap:8px;align-items:center">
+                                        <input type="hidden" name="action" value="dbseo_redirect_action">
+                                        <input type="hidden" name="op"     value="add">
+                                        <input type="hidden" name="source" value="<?php echo esc_attr($r->url); ?>">
+                                        <input type="hidden" name="type"   value="301">
+                                        <?php wp_nonce_field('dbseo_redirect', '_dbseo_redirect_nonce'); ?>
+                                        <input type="text" name="target" placeholder="/nuova-destinazione" required style="min-width:220px">
+                                        <button type="submit" class="db-ui-btn db-ui-btn-sm db-ui-btn-primary">301</button>
+                                    </form>
+                                </details>
                                 <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline" data-confirm-delete>
                                     <input type="hidden" name="action" value="dbseo_404_action">
                                     <input type="hidden" name="op"     value="delete">
@@ -861,6 +966,28 @@ class DBSEO_Settings {
     public function render_status() {
         $this->open_wrap(__('Stato GDPR del sito', 'db-seo-manager'),
             __('Sintesi in tempo reale di ciò che è attivo e cosa il sito potrebbe caricare.', 'db-seo-manager'));
+
+        // Audit schedulato: monitoraggio regressioni privacy.
+        $sset = DBSEO_Core::instance()->get_settings();
+        ?>
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" class="dbseo-form">
+            <input type="hidden" name="action"  value="<?php echo esc_attr(self::SAVE_ACTION); ?>">
+            <input type="hidden" name="section" value="audit_schedule">
+            <?php wp_nonce_field(self::NONCE_ACTION, self::NONCE_FIELD); ?>
+            <div class="db-ui-card">
+                <div class="db-ui-card-header"><h3><?php esc_html_e('Audit schedulato', 'db-seo-manager'); ?></h3></div>
+                <div class="db-ui-card-body">
+                    <?php $this->checkbox_field('audit_schedule_enabled', $sset['audit_schedule_enabled'] ?? false,
+                        __('Esegui l\'audit ogni settimana e avvisami via email se compaiono nuove risorse esterne', 'db-seo-manager'),
+                        __('Monitoraggio di regressione privacy: se un tema, un plugin o un embed inizia a caricare un nuovo host esterno, ricevi un alert. Un solo avviso per host.', 'db-seo-manager')); ?>
+                    <?php $this->text_field('audit_alert_email', $sset['audit_alert_email'] ?? '',
+                        __('Email per gli alert', 'db-seo-manager'),
+                        __('Vuota = email amministratore del sito.', 'db-seo-manager')); ?>
+                    <button type="submit" class="db-ui-btn db-ui-btn-primary db-ui-btn-sm"><?php esc_html_e('Salva', 'db-seo-manager'); ?></button>
+                </div>
+            </div>
+        </form>
+        <?php
 
         $core    = DBSEO_Core::instance();
         $audit   = $core->module('audit');
@@ -1233,20 +1360,22 @@ class DBSEO_Settings {
             'schema' => array('schema_org_type', 'schema_org_name', 'schema_org_telephone', 'schema_org_email'),
             'analytics' => array('analytics_provider', 'analytics_id', 'meta_pixel_id'),
             'verify' => array('verify_google', 'verify_bing', 'verify_yandex', 'verify_pinterest'),
+            'audit_schedule' => array('audit_alert_email'),
         );
 
         $textarea_keys = array(
             'titles' => array('desc_home', 'desc_post', 'desc_page'),
-            'sitemap' => array('robots_txt_custom'),
+            'sitemap' => array('robots_txt_custom', 'llms_txt_custom'),
+            'monitor_404' => array('monitor_404_exclude_patterns'),
         );
 
         $bool_keys = array(
             'titles' => array('noindex_search', 'noindex_404', 'noindex_author', 'noindex_date', 'noindex_attachment'),
             'social' => array('og_enabled'),
             'schema' => array('schema_enabled', 'breadcrumb_enabled'),
-            'sitemap' => array('sitemap_enabled'),
-            'redirects_settings' => array('redirects_enabled', 'redirects_no_count'),
-            'monitor_404' => array('monitor_404_enabled'),
+            'sitemap' => array('sitemap_enabled', 'llms_txt_enabled'),
+            'redirects_settings' => array('redirects_enabled', 'redirects_no_count', 'redirects_regex_only_404'),
+            'monitor_404' => array('monitor_404_enabled', 'monitor_404_internal_referer_only'),
             'analytics'   => array('analytics_enabled', 'analytics_consent_mode', 'analytics_anonymize_ip', 'meta_pixel_enabled'),
             'indexnow'    => array('indexnow_enabled'),
             'hardening'   => array(
@@ -1308,11 +1437,38 @@ class DBSEO_Settings {
                     if ($n > 0) $excl_ids[] = $n;
                 }
                 $out['sitemap_exclude_ids'] = array_values(array_unique($excl_ids));
+
+                // Crawler AI: solo slug presenti nel catalogo.
+                $valid_bots = array_keys(DBSEO_AI_Robots::bots());
+                $bots = isset($input['ai_bots_block']) && is_array($input['ai_bots_block'])
+                    ? array_map('sanitize_key', $input['ai_bots_block'])
+                    : array();
+                $out['ai_bots_block'] = array_values(array_intersect($bots, $valid_bots));
                 break;
 
             case 'monitor_404':
                 if (isset($input['monitor_404_keep_days'])) {
                     $out['monitor_404_keep_days'] = max(1, min(365, (int) $input['monitor_404_keep_days']));
+                }
+                if (isset($input['monitor_404_max_rows'])) {
+                    $out['monitor_404_max_rows'] = max(100, min(100000, (int) $input['monitor_404_max_rows']));
+                }
+                // Valida le regex una per una: le righe non valide vengono scartate.
+                if (isset($out['monitor_404_exclude_patterns'])) {
+                    $valid = array();
+                    foreach (preg_split('/\r\n|\r|\n/', $out['monitor_404_exclude_patterns']) as $line) {
+                        $line = trim($line);
+                        if ($line === '') continue;
+                        if (@preg_match('#' . str_replace('#', '\#', $line) . '#i', '') !== false) $valid[] = $line;
+                    }
+                    $out['monitor_404_exclude_patterns'] = implode("\n", $valid);
+                }
+                break;
+
+            case 'audit_schedule':
+                $out['audit_schedule_enabled'] = !empty($input['audit_schedule_enabled']);
+                if (isset($out['audit_alert_email']) && $out['audit_alert_email'] !== '' && !is_email($out['audit_alert_email'])) {
+                    $out['audit_alert_email'] = '';
                 }
                 break;
         }
@@ -1341,6 +1497,16 @@ class DBSEO_Settings {
                 !empty($_POST['is_regex'])
             );
             $msg = is_wp_error($r) ? 'redirect_error' : 'redirect_added';
+        } elseif ($op === 'update' && $module) {
+            $data = array(
+                'target'   => isset($_POST['target']) ? sanitize_text_field(wp_unslash($_POST['target'])) : '',
+                'type'     => isset($_POST['type']) ? (int) $_POST['type'] : 301,
+                'is_regex' => !empty($_POST['is_regex']),
+            );
+            $src = isset($_POST['source']) ? trim(wp_unslash($_POST['source'])) : '';
+            if ($src !== '') $data['source'] = $src;
+            $ok = $module->update_rule((int) ($_POST['id'] ?? 0), $data);
+            $msg = $ok ? 'redirect_updated' : 'redirect_error';
         } elseif ($op === 'delete' && $module) {
             $module->delete_rule((int) ($_POST['id'] ?? 0));
             $msg = 'redirect_deleted';

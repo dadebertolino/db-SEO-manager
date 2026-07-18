@@ -72,7 +72,21 @@ class DBSEO_404_Monitor {
             $referer = $this->sanitize_referer($referer);
         }
 
+        // Opzionale: logga solo 404 con referer interno (link rotti "veri",
+        // ignora gli scan dei bot che non inviano referer o arrivano da fuori).
+        if (DBSEO_Core::instance()->get('monitor_404_internal_referer_only')) {
+            $home_host = strtolower((string) wp_parse_url(home_url(), PHP_URL_HOST));
+            $ref_host  = strtolower((string) wp_parse_url($referer, PHP_URL_HOST));
+            if ($referer === '' || $ref_host !== $home_host) return;
+        }
+
         $this->insert_or_increment($url, $referer);
+
+        // Anti-flooding: enforcement probabilistico del tetto righe (1 su 50),
+        // enforcement deterministico nel cron giornaliero di cleanup.
+        if (wp_rand(1, 50) === 1) {
+            $this->enforce_max_rows();
+        }
 
         do_action('dbseo_404_logged', $url);
     }
@@ -91,7 +105,36 @@ class DBSEO_404_Monitor {
         foreach ($ignore_patterns as $p) {
             if (strpos($url, $p) !== false) return true;
         }
+
+        // Pattern regex configurabili (uno per riga, case-insensitive).
+        // Default: probe di vulnerabilità (.php, .env, .git) e asset statici.
+        $custom = (string) DBSEO_Core::instance()->get('monitor_404_exclude_patterns', '');
+        foreach (preg_split('/\r\n|\r|\n/', $custom) as $pattern) {
+            $pattern = trim($pattern);
+            if ($pattern === '') continue;
+            if (@preg_match('#' . str_replace('#', '\#', $pattern) . '#i', $url)) return true;
+        }
         return false;
+    }
+
+    /**
+     * Tetto righe anti-flooding: elimina le voci meno rilevanti
+     * (count più basso, più vecchie) oltre monitor_404_max_rows.
+     */
+    public function enforce_max_rows() {
+        global $wpdb;
+        $tbl = $wpdb->prefix . 'dbseo_404_log';
+        $max = max(100, (int) DBSEO_Core::instance()->get('monitor_404_max_rows', 5000));
+
+        $total = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$tbl}");
+        if ($total <= $max) return;
+
+        $excess = $total - $max;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+        $wpdb->query($wpdb->prepare(
+            "DELETE FROM {$tbl} ORDER BY count ASC, last_seen ASC LIMIT %d",
+            $excess
+        ));
     }
 
     private function truncate_url($url) {
@@ -141,6 +184,9 @@ class DBSEO_404_Monitor {
             "DELETE FROM {$tbl} WHERE last_seen < DATE_SUB(NOW(), INTERVAL %d DAY)",
             $days
         ));
+
+        // Enforcement deterministico del tetto righe.
+        $this->enforce_max_rows();
     }
 
     /* =====================================================================

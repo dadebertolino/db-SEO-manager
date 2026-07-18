@@ -48,8 +48,8 @@ class DBSEO_Sitemap {
         add_action('parse_request', array($this, 'serve_sitemap'));
 
         // Invalidazione cache quando i contenuti cambiano.
-        add_action('save_post',     array($this, 'invalidate_cache'));
-        add_action('deleted_post',  array($this, 'invalidate_cache'));
+        add_action('save_post',     array($this, 'invalidate_for_post'));
+        add_action('deleted_post',  array($this, 'invalidate_for_post'));
         add_action('edited_term',   array($this, 'invalidate_cache'));
         add_action('created_term',  array($this, 'invalidate_cache'));
         add_action('delete_term',   array($this, 'invalidate_cache'));
@@ -188,6 +188,14 @@ class DBSEO_Sitemap {
         $excluded = (array) DBSEO_Core::instance()->get('sitemap_exclude_ids', array());
         $excluded = (array) apply_filters('dbseo_sitemap_exclude_ids', $excluded, $post_type);
 
+        // Performance: niente meta_query NOT EXISTS (LEFT JOIN pesante su
+        // postmeta nei siti grandi). Gli ID noindex sono pochi: li leggiamo
+        // con una query diretta cachata e li uniamo a post__not_in.
+        $excluded = array_values(array_unique(array_merge(
+            array_map('intval', $excluded),
+            $this->get_meta_flag_ids('_dbseo_robots_noindex')
+        )));
+
         $args = array(
             'post_type'      => $post_type,
             'post_status'    => 'publish',
@@ -195,14 +203,8 @@ class DBSEO_Sitemap {
             'paged'          => $paged,
             'orderby'        => 'modified',
             'order'          => 'DESC',
-            'no_found_rows'  => false,
+            'no_found_rows'  => true,
             'post__not_in'   => $excluded,
-            'meta_query'     => array(
-                array(
-                    'key'     => '_dbseo_robots_noindex',
-                    'compare' => 'NOT EXISTS',
-                ),
-            ),
         );
 
         $q = new WP_Query($args);
@@ -215,6 +217,8 @@ class DBSEO_Sitemap {
             $xml .= $this->url_node(home_url('/'), current_time('c'), 'daily', '1.0');
         }
 
+        $cornerstone_ids = $this->get_meta_flag_ids('_dbseo_cornerstone');
+
         if ($q->have_posts()) {
             foreach ($q->posts as $post) {
                 $loc     = get_permalink($post);
@@ -224,6 +228,9 @@ class DBSEO_Sitemap {
                 $xml .= "  <url>\n";
                 $xml .= '    <loc>' . esc_url($loc) . "</loc>\n";
                 $xml .= '    <lastmod>' . esc_html($lastmod) . "</lastmod>\n";
+                if (in_array((int) $post->ID, $cornerstone_ids, true)) {
+                    $xml .= "    <priority>1.0</priority>\n";
+                }
                 foreach ($images as $img_url) {
                     $xml .= "    <image:image>\n";
                     $xml .= '      <image:loc>' . esc_url($img_url) . "</image:loc>\n";
@@ -336,6 +343,64 @@ class DBSEO_Sitemap {
 
         $urls = array_unique($urls);
         return array_slice($urls, 0, 1000);
+    }
+
+    /**
+     * ID dei post pubblicati con un flag meta truthy (noindex, cornerstone).
+     * Query diretta preparata, cache transient invalidata con la sitemap.
+     *
+     * @param string $meta_key
+     * @return int[]
+     */
+    private function get_meta_flag_ids($meta_key) {
+        $cache_key = self::CACHE_GROUP . 'flag_' . md5($meta_key);
+        $cached = get_transient($cache_key);
+        if (is_array($cached)) return $cached;
+
+        global $wpdb;
+        $ids = $wpdb->get_col($wpdb->prepare(
+            "SELECT pm.post_id FROM {$wpdb->postmeta} pm
+             INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+             WHERE pm.meta_key = %s AND pm.meta_value = '1'
+               AND p.post_status = 'publish'",
+            $meta_key
+        ));
+        $ids = array_map('intval', (array) $ids);
+
+        set_transient($cache_key, $ids, self::CACHE_DURATION);
+        return $ids;
+    }
+
+    /**
+     * Invalidazione mirata: cancella solo i transient del post type toccato
+     * (+ index + cache flag), invece dell'intera cache sitemap.
+     *
+     * @param int $post_id
+     */
+    public function invalidate_for_post($post_id) {
+        $post = get_post($post_id);
+        if (!$post) {
+            $this->invalidate_cache();
+            return;
+        }
+
+        // I revisioni/autosave non toccano la sitemap.
+        if (wp_is_post_revision($post_id) || $post->post_status === 'auto-draft') return;
+
+        $allowed = (array) DBSEO_Core::instance()->get('sitemap_post_types', array('post', 'page'));
+        if (!in_array($post->post_type, $allowed, true)) return;
+
+        global $wpdb;
+        $like = $wpdb->esc_like('_transient_' . self::CACHE_GROUP . 'type_' . $post->post_type . '_');
+        $like_to = $wpdb->esc_like('_transient_timeout_' . self::CACHE_GROUP . 'type_' . $post->post_type . '_');
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+        $wpdb->query($wpdb->prepare(
+            "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+            $like . '%', $like_to . '%'
+        ));
+        delete_transient(self::CACHE_GROUP . 'index');
+        delete_transient(self::CACHE_GROUP . 'flag_' . md5('_dbseo_robots_noindex'));
+        delete_transient(self::CACHE_GROUP . 'flag_' . md5('_dbseo_cornerstone'));
     }
 
     public function invalidate_cache() {

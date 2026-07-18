@@ -36,12 +36,117 @@ class DBSEO_Schema {
         return self::$instance;
     }
 
+    /** @var array Item FAQ raccolti dagli shortcode nella pagina corrente. */
+    private $faq_items = array();
+
+    /** @var array Step HowTo raccolti dagli shortcode nella pagina corrente. */
+    private $howto = array();
+
     private function __construct() {
+        // Gli shortcode vanno registrati anche in admin (preview editor).
+        add_shortcode('dbseo_faq',       array($this, 'shortcode_faq'));
+        add_shortcode('dbseo_faq_item',  array($this, 'shortcode_faq_item'));
+        add_shortcode('dbseo_howto',     array($this, 'shortcode_howto'));
+        add_shortcode('dbseo_howto_step', array($this, 'shortcode_howto_step'));
+
         if (is_admin()) return;
         if (!DBSEO_Core::instance()->get('schema_enabled')) return;
 
         // Priorità 5 per stare prima di altri plugin schema.
         add_action('wp_head', array($this, 'output'), 5);
+
+        // FAQ/HowTo: gli shortcode vengono processati DOPO wp_head, quindi
+        // il loro JSON-LD viene emesso nel footer (posizione valida per Google).
+        add_action('wp_footer', array($this, 'output_collected'), 20);
+    }
+
+    /* =====================================================================
+     * Shortcode FAQ — [dbseo_faq][dbseo_faq_item q="..."]risposta[/dbseo_faq_item][/dbseo_faq]
+     * ================================================================== */
+
+    public function shortcode_faq($atts, $content = '') {
+        $this->faq_items = array();
+        $inner = do_shortcode($content);
+        // Markup accessibile: details/summary nativi.
+        return '<div class="dbseo-faq" itemscope>' . $inner . '</div>';
+    }
+
+    public function shortcode_faq_item($atts, $content = '') {
+        $atts = shortcode_atts(array('q' => ''), $atts, 'dbseo_faq_item');
+        $q = sanitize_text_field($atts['q']);
+        $a = wp_kses_post($content);
+        if ($q === '' || trim($a) === '') return '';
+
+        $this->faq_items[] = array('q' => $q, 'a' => wp_strip_all_tags($a));
+
+        return '<details class="dbseo-faq-item"><summary>' . esc_html($q) . '</summary><div class="dbseo-faq-answer">' . $a . '</div></details>';
+    }
+
+    /* =====================================================================
+     * Shortcode HowTo — [dbseo_howto name="..."][dbseo_howto_step name="..."]testo[/dbseo_howto_step][/dbseo_howto]
+     * ================================================================== */
+
+    public function shortcode_howto($atts, $content = '') {
+        $atts = shortcode_atts(array('name' => '', 'total_time' => ''), $atts, 'dbseo_howto');
+        $this->howto = array(
+            'name'       => sanitize_text_field($atts['name']),
+            'total_time' => sanitize_text_field($atts['total_time']), // ISO 8601, es. PT30M
+            'steps'      => array(),
+        );
+        $inner = do_shortcode($content);
+        return '<div class="dbseo-howto"><ol class="dbseo-howto-steps">' . $inner . '</ol></div>';
+    }
+
+    public function shortcode_howto_step($atts, $content = '') {
+        $atts = shortcode_atts(array('name' => ''), $atts, 'dbseo_howto_step');
+        $name = sanitize_text_field($atts['name']);
+        $text = wp_kses_post($content);
+        if (trim($text) === '') return '';
+
+        $this->howto['steps'][] = array('name' => $name, 'text' => wp_strip_all_tags($text));
+
+        $label = $name !== '' ? '<strong>' . esc_html($name) . '</strong> — ' : '';
+        return '<li class="dbseo-howto-step">' . $label . $text . '</li>';
+    }
+
+    /**
+     * Emette il JSON-LD di FAQ/HowTo raccolti dagli shortcode (footer).
+     */
+    public function output_collected() {
+        $graph = array();
+
+        if (!empty($this->faq_items)) {
+            $entities = array();
+            foreach ($this->faq_items as $item) {
+                $entities[] = array(
+                    '@type'          => 'Question',
+                    'name'           => $item['q'],
+                    'acceptedAnswer' => array('@type' => 'Answer', 'text' => $item['a']),
+                );
+            }
+            $graph[] = array('@type' => 'FAQPage', 'mainEntity' => $entities);
+        }
+
+        if (!empty($this->howto['steps'])) {
+            $steps = array();
+            $pos = 1;
+            foreach ($this->howto['steps'] as $st) {
+                $step = array('@type' => 'HowToStep', 'position' => $pos++, 'text' => $st['text']);
+                if ($st['name'] !== '') $step['name'] = $st['name'];
+                $steps[] = $step;
+            }
+            $node = array('@type' => 'HowTo', 'step' => $steps);
+            if ($this->howto['name'] !== '')       $node['name']      = $this->howto['name'];
+            if ($this->howto['total_time'] !== '') $node['totalTime'] = $this->howto['total_time'];
+            $graph[] = $node;
+        }
+
+        $graph = (array) apply_filters('dbseo_schema_footer_graph', $graph);
+        if (empty($graph)) return;
+
+        $json = wp_json_encode(array('@context' => 'https://schema.org', '@graph' => array_values($graph)), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        if ($json === false) return;
+        echo '<script type="application/ld+json">' . $json . "</script>\n"; // phpcs:ignore WordPress.Security.EscapeOutput
     }
 
     public function output() {

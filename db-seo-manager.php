@@ -3,7 +3,7 @@
  * Plugin Name:       DB SEO Manager
  * Plugin URI:        https://www.davidebertolino.it/progetti/db-seo-manager/
  * Description:       SEO completa e GDPR-first per WordPress: meta tag, OpenGraph, Schema.org JSON-LD, sitemap XML, redirect, breadcrumb, analisi contenuti. Niente servizi esterni, niente tracciamento, niente nag. Snippet di analytics gestiti tramite consent gate. Integrazione nativa con DB Cookie Manager 3.1.0+ e DB Privacy Hub 1.0.0+.
- * Version:           1.3.0
+ * Version:           1.4.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Davide Bertolino
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) exit;
 /* -------------------------------------------------------------------------
  * Costanti
  * ---------------------------------------------------------------------- */
-define('DBSEO_VERSION',      '1.3.0');
+define('DBSEO_VERSION',      '1.4.0');
 define('DBSEO_PLUGIN_FILE',  __FILE__);
 define('DBSEO_PLUGIN_DIR',   plugin_dir_path(__FILE__));
 define('DBSEO_PLUGIN_URL',   plugin_dir_url(__FILE__));

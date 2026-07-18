@@ -35,8 +35,81 @@ class DBSEO_Audit {
     }
 
     private function __construct() {
+        // Cron: deve essere registrato SEMPRE (wp-cron non passa da is_admin).
+        add_action('dbseo_cron_audit', array($this, 'run_scheduled'));
+
+        if (DBSEO_Core::instance()->get('audit_schedule_enabled')) {
+            if (!wp_next_scheduled('dbseo_cron_audit')) {
+                wp_schedule_event(time() + HOUR_IN_SECONDS, 'weekly', 'dbseo_cron_audit');
+            }
+        } elseif (wp_next_scheduled('dbseo_cron_audit')) {
+            wp_clear_scheduled_hook('dbseo_cron_audit');
+        }
+
         if (!is_admin()) return;
         add_action('admin_post_dbseo_run_audit', array($this, 'handle_run'));
+    }
+
+    /* =====================================================================
+     * Audit schedulato — monitoraggio regressioni privacy
+     * ================================================================== */
+
+    /**
+     * Esecuzione via cron: confronta gli host trovati con la baseline nota.
+     * Se compaiono host esterni nuovi, invia una mail di alert e aggiorna
+     * la baseline (alert one-shot per host, niente spam).
+     */
+    public function run_scheduled() {
+        $core = DBSEO_Core::instance();
+        if (!$core->get('audit_schedule_enabled')) return;
+
+        $this->run();
+
+        $results = (array) $core->get('audit_last_results', array());
+        if (isset($results['error'])) return;
+
+        // Estrae gli host dai findings (struttura: array di righe con 'host').
+        $current = array();
+        foreach ((array) ($results['findings'] ?? $results) as $row) {
+            $host = '';
+            if (is_array($row) && isset($row['host'])) $host = (string) $row['host'];
+            elseif (is_object($row) && isset($row->host)) $host = (string) $row->host;
+            if ($host !== '') $current[] = strtolower($host);
+        }
+        $current  = array_values(array_unique($current));
+        $baseline = array_map('strtolower', (array) $core->get('audit_known_baseline', array()));
+
+        $new_hosts = array_diff($current, $baseline);
+        if (empty($new_hosts)) return;
+
+        // Alert email.
+        $to = trim((string) $core->get('audit_alert_email', ''));
+        if ($to === '' || !is_email($to)) $to = get_option('admin_email');
+
+        $subject = sprintf(
+            /* translators: %s: site name */
+            __('[%s] Nuove risorse esterne rilevate sul sito', 'db-seo-manager'),
+            get_bloginfo('name')
+        );
+        $body  = __("L'audit schedulato di DB SEO Manager ha rilevato nuove risorse esterne caricate dalla homepage del sito:", 'db-seo-manager') . "
+
+";
+        foreach ($new_hosts as $h) {
+            $body .= " - {$h}
+";
+        }
+        $body .= "
+" . __('Se queste risorse trattano dati personali potrebbero richiedere consenso o aggiornamento della privacy policy. Verifica nella pagina "Stato GDPR" del plugin.', 'db-seo-manager') . "
+";
+        $body .= admin_url('admin.php?page=dbseo-status') . "
+";
+
+        wp_mail($to, $subject, $body);
+
+        // Aggiorna la baseline: alert una sola volta per host.
+        $core->update(array('audit_known_baseline' => array_values(array_unique(array_merge($baseline, $new_hosts)))));
+
+        do_action('dbseo_audit_new_hosts', $new_hosts);
     }
 
     /* =====================================================================
