@@ -14,10 +14,11 @@
  *  - L'admin viene avvisato dalla UI.
  *
  * Effetti quando attivo:
- *  - Forza analytics_enabled, meta_pixel_enabled, indexnow_enabled a false.
- *    Questi flag vengono "letti" come false anche se nel DB sono true, finché
- *    Hard Privacy resta on. (Soft enforcement: il valore originale è preservato
- *    e tornerà attivo se Hard Privacy viene disattivato.)
+ *  - Analytics, Meta Pixel e IndexNow sono sospesi. Non tramite un filtro
+ *    option_* (arriverebbe dopo la cache delle impostazioni in DBSEO_Core e
+ *    non avrebbe effetto): ogni modulo controlla direttamente
+ *    DBSEO_Core::is_hard_privacy(). I flag salvati non vengono toccati e
+ *    tornano attivi se Hard Privacy viene disattivato.
  *
  * @package DB_SEO_Manager
  */
@@ -49,10 +50,7 @@ class DBSEO_Hardening {
 
     private function __construct() {
         $core = DBSEO_Core::instance();
-        if (!$core->get('hard_privacy_enabled')) return;
-
-        // Soft enforcement dei flag esterni: filtriamo le opzioni in lettura.
-        add_filter('option_' . DBSEO_OPTION_KEY, array($this, 'enforce_external_off'));
+        if (!DBSEO_Core::is_hard_privacy()) return;
 
         if ($core->get('hard_privacy_strip_emoji'))          $this->strip_emojis();
         if ($core->get('hard_privacy_strip_oembed'))         $this->strip_oembed();
@@ -61,25 +59,6 @@ class DBSEO_Hardening {
         if ($core->get('hard_privacy_strip_google_fonts'))   $this->strip_google_fonts();
         if ($core->get('hard_privacy_disable_xmlrpc'))       $this->disable_xmlrpc();
         if ($core->get('hard_privacy_disable_rest_api_users')) $this->protect_rest_users();
-    }
-
-    /* =====================================================================
-     * Soft enforcement
-     * ================================================================== */
-
-    /**
-     * Quando Hard Privacy è on, forziamo i flag delle integrazioni esterne a false
-     * in lettura. Questo NON modifica il DB: se l'admin disattiva Hard Privacy,
-     * le impostazioni originali tornano in vigore.
-     *
-     * Eseguito via filter option_* per intercettare ogni get_option('dbseo_settings').
-     */
-    public function enforce_external_off($value) {
-        if (!is_array($value)) return $value;
-        $value['analytics_enabled']   = false;
-        $value['meta_pixel_enabled']  = false;
-        $value['indexnow_enabled']    = false;
-        return $value;
     }
 
     /* =====================================================================

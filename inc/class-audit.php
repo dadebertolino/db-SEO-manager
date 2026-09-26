@@ -396,8 +396,14 @@ class DBSEO_Audit {
         $score = 100;
         $reasons = array();
 
+        // Stato effettivo delle integrazioni esterne: con Hard Privacy attivo
+        // sono sospese anche se i flag salvati sono true.
+        $hard          = DBSEO_Core::is_hard_privacy();
+        $analytics_on  = !$hard && $core->get('analytics_enabled');
+        $meta_pixel_on = !$hard && $core->get('meta_pixel_enabled');
+
         // Penalità: integrazioni esterne attive.
-        if ($core->get('analytics_enabled')) {
+        if ($analytics_on) {
             $score -= 5;
             $reasons[] = array('penalty' => 5, 'msg' => __('Analytics attivo', 'db-seo-manager'));
 
@@ -410,7 +416,7 @@ class DBSEO_Audit {
                 $reasons[] = array('penalty' => 3, 'msg' => __('Anonimizzazione IP disattiva', 'db-seo-manager'));
             }
         }
-        if ($core->get('meta_pixel_enabled')) {
+        if ($meta_pixel_on) {
             $score -= 8;
             $reasons[] = array('penalty' => 8, 'msg' => __('Meta Pixel attivo (trasferimento extra-UE)', 'db-seo-manager'));
         }
@@ -442,7 +448,7 @@ class DBSEO_Audit {
         }
 
         // Bonus.
-        if ($core->get('hard_privacy_enabled')) {
+        if ($hard) {
             $score += 10;
             $reasons[] = array('penalty' => -10, 'msg' => __('Hard Privacy attivo', 'db-seo-manager'));
         }
@@ -476,7 +482,7 @@ class DBSEO_Audit {
         // La penalità si aggiunge a quelle già presenti su analytics_enabled
         // (-5) e meta_pixel_enabled (-8): la situazione "tracker attivi senza
         // consent manager" è strettamente peggio di "tracker attivi e basta".
-        $has_external = $core->get('analytics_enabled') || $core->get('meta_pixel_enabled');
+        $has_external = $analytics_on || $meta_pixel_on;
         $has_any_cm   = $dbcm_active || function_exists('wp_has_consent');
         if ($has_external && !$has_any_cm) {
             $score -= 15;

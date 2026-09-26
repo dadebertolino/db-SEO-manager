@@ -3,7 +3,7 @@
  * Plugin Name:       DB SEO Manager
  * Plugin URI:        https://www.davidebertolino.it/progetti/db-seo-manager/
  * Description:       SEO completa e GDPR-first per WordPress: meta tag, OpenGraph, Schema.org JSON-LD, sitemap XML, redirect, breadcrumb, analisi contenuti. Niente servizi esterni, niente tracciamento, niente nag. Snippet di analytics gestiti tramite consent gate. Integrazione nativa con DB Cookie Manager 3.1.0+ e DB Privacy Hub 1.0.0+.
- * Version:           1.4.0
+ * Version:           1.5.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Davide Bertolino
@@ -18,17 +18,32 @@
 
 if (!defined('ABSPATH')) exit;
 
+/**
+ * Privacy capabilities (per references/PRIVACY-INTEGRATION.md):
+ *  - Personal data:        MINIMAL — log 404 (solo percorso URL/referer senza
+ *                          query string, nessun IP/user-agent, auto-pulizia);
+ *                          meta SEO dei post collegati all'autore.
+ *  - Third-party scripts:  YES — GA4, GTM, Matomo, Plausible, Umami, Meta Pixel
+ *                          (gated da consenso lato client, cache-safe)
+ *  - User consent:         NO — consuma il consenso di DB Cookie Manager /
+ *                          WP Consent API / Cookiebot / Complianz
+ *  - DSAR-aware:           YES — DBSEO_WP_Privacy_Tools (export meta SEO autore;
+ *                          erase: meta editoriali conservati con motivazione)
+ *  - Hub-aware:            YES — DBSEO_Privacy_Declarations su dbph_processing_register
+ */
+define('DBSEO_DSAR_AVAILABLE', true);
+
 /* -------------------------------------------------------------------------
  * Costanti
  * ---------------------------------------------------------------------- */
-define('DBSEO_VERSION',      '1.4.0');
+define('DBSEO_VERSION',      '1.5.0');
 define('DBSEO_PLUGIN_FILE',  __FILE__);
 define('DBSEO_PLUGIN_DIR',   plugin_dir_path(__FILE__));
 define('DBSEO_PLUGIN_URL',   plugin_dir_url(__FILE__));
 define('DBSEO_PLUGIN_BASE',  plugin_basename(__FILE__));
 define('DBSEO_TEXT_DOMAIN',  'db-seo-manager');
 define('DBSEO_OPTION_KEY',   'dbseo_settings');
-define('DBSEO_DB_VERSION',   '1.0.0');
+define('DBSEO_DB_VERSION',   '1.1.0');
 
 /* -------------------------------------------------------------------------
  * GitHub Auto-Updater (componente condiviso)
@@ -105,6 +120,8 @@ function dbseo_deactivate() {
     flush_rewrite_rules();
     wp_clear_scheduled_hook('dbseo_cron_broken_links');
     wp_clear_scheduled_hook('dbseo_cron_indexnow_flush');
+    wp_clear_scheduled_hook('dbseo_cron_404_cleanup');
+    wp_clear_scheduled_hook('dbseo_cron_audit');
 }
 
 /* -------------------------------------------------------------------------

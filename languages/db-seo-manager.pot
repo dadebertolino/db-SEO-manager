@@ -2,497 +2,55 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: DB SEO Manager 1.2.0\n"
+"Project-Id-Version: DB SEO Manager 1.5.0\n"
 "Report-Msgid-Bugs-To: info@davidebertolino.it\n"
-"POT-Creation-Date: 2026-05-02 07:00+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-26T14:16:44+00:00\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: db-seo-manager\n"
 
-#: db-seo-manager.php:81
-msgid "DB SEO Manager richiede PHP 7.4 o superiore."
-msgstr ""
-
-#: db-seo-manager.php:89
-msgid "DB SEO Manager richiede WordPress 5.8 o superiore."
-msgstr ""
-
-#: inc/class-importer.php:53
-#: inc/class-importer.php:54
-msgid "Importa SEO"
-msgstr ""
-
-#: inc/class-importer.php:213
-msgid "Importa meta SEO"
-msgstr ""
-
-#: inc/class-importer.php:218
-msgid "L'importazione legge i meta dal plugin sorgente senza modificarli. Disinstalla l'altro plugin solo dopo aver verificato la migrazione."
-msgstr ""
-
-#: inc/class-importer.php:242
-msgid "Nessun meta trovato per questo plugin."
-msgstr ""
-
-#: inc/class-importer.php:246
-msgid "Modalità"
-msgstr ""
-
-#: inc/class-importer.php:249
-msgid "Preserva (non sovrascrive valori già impostati in DB SEO)"
-msgstr ""
-
-#: inc/class-importer.php:253
-msgid "Sovrascrivi (rimpiazza ogni valore presente in DB SEO)"
-msgstr ""
-
-#: inc/class-importer.php:260
-msgid "Avvia importazione"
-msgstr ""
-
-#: inc/class-importer.php:306
-msgid "Errore durante l'importazione."
-msgstr ""
-
-#: inc/class-importer.php:316
-msgid "migrati:"
-msgstr ""
-
-#: inc/class-importer.php:316
-msgid "saltati:"
-msgstr ""
-
-#: inc/class-importer.php:320
-msgid "Completato"
-msgstr ""
-
-#: inc/class-importer.php:321
-msgid "Importazione completata"
-msgstr ""
-
-#: inc/class-importer.php:328
-msgid "Errore di rete."
-msgstr ""
-
-#: inc/class-consent-gate.php:86
-#: inc/class-privacy.php:352
-#: inc/class-privacy.php:419
+#. Plugin Name of the plugin
+#: db-seo-manager.php
 #: inc/class-settings.php:56
+#: inc/class-wp-privacy-tools.php:118
+#: inc/class-wp-privacy-tools.php:129
 msgid "DB SEO Manager"
 msgstr ""
 
-#: inc/class-consent-gate.php:110
-msgid "Identifica l'utente in modo univoco."
+#. Plugin URI of the plugin
+#: db-seo-manager.php
+msgid "https://www.davidebertolino.it/progetti/db-seo-manager/"
 msgstr ""
 
-#: inc/class-consent-gate.php:111
-msgid "Identifica la sessione GA4."
+#. Description of the plugin
+#: db-seo-manager.php
+msgid "SEO completa e GDPR-first per WordPress: meta tag, OpenGraph, Schema.org JSON-LD, sitemap XML, redirect, breadcrumb, analisi contenuti. Niente servizi esterni, niente tracciamento, niente nag. Snippet di analytics gestiti tramite consent gate. Integrazione nativa con DB Cookie Manager 3.1.0+ e DB Privacy Hub 1.0.0+."
 msgstr ""
 
-#: inc/class-consent-gate.php:112
-msgid "Identifica l'utente per 24 ore."
+#. Author of the plugin
+#: db-seo-manager.php
+msgid "Davide Bertolino"
 msgstr ""
 
-#: inc/class-consent-gate.php:119
-msgid "Throttle delle richieste GA via GTM."
+#. Author URI of the plugin
+#: db-seo-manager.php
+msgid "https://www.davidebertolino.it"
 msgstr ""
 
-#: inc/class-consent-gate.php:152
-msgid "Misurazione del traffico tramite %s."
+#: db-seo-manager.php:96
+msgid "DB SEO Manager richiede PHP 7.4 o superiore."
 msgstr ""
 
-#: inc/class-consent-gate.php:169
-msgid "Identifica il browser per misurazione conversioni Meta."
+#: db-seo-manager.php:104
+msgid "DB SEO Manager richiede WordPress 5.8 o superiore."
 msgstr ""
 
-#: inc/class-consent-gate.php:170
-msgid "Identifica i click dagli annunci Meta."
-msgstr ""
-
-#: inc/class-consent-gate.php:173
-msgid "Misurazione conversioni e remarketing su piattaforme Meta. Trasferimento extra-UE (USA)."
-msgstr ""
-
-#: inc/class-redirects.php:204
-msgid "Origine e destinazione sono obbligatorie."
-msgstr ""
-
-#: inc/class-redirects.php:206
-msgid "Codice di redirect non valido."
-msgstr ""
-
-#: inc/class-redirects.php:211
-msgid "Espressione regolare non valida."
-msgstr ""
-
-#: inc/class-redirects.php:226
-msgid "Errore di salvataggio (origine già esistente?)."
-msgstr ""
-
-#: inc/class-privacy.php:64
-msgid "Registro tecnico dei trattamenti attivi sul sito derivati dalle impostazioni del plugin DB SEO Manager. Il plugin NON è il titolare del trattamento."
-msgstr ""
-
-#: inc/class-privacy.php:96
-msgid "Registro privacy SEO"
-msgstr ""
-
-#: inc/class-privacy.php:118
-msgid "Stampa / Salva come PDF"
-msgstr ""
-
-#: inc/class-privacy.php:120
-msgid "Registro privacy — Trattamenti tecnici SEO"
-msgstr ""
-
-#: inc/class-privacy.php:126
-msgid "Generato il: %s"
-msgstr ""
-
-#: inc/class-privacy.php:135
-msgid "Trattamenti"
-msgstr ""
-
-#: inc/class-privacy.php:141
-msgid "ATTIVO"
-msgstr ""
-
-#: inc/class-privacy.php:141
-#: inc/class-settings.php:1029
-msgid "disattivo"
-msgstr ""
-
-#: inc/class-privacy.php:145
-msgid "Finalità"
-msgstr ""
-
-#: inc/class-privacy.php:147
-msgid "Base giuridica"
-msgstr ""
-
-#: inc/class-privacy.php:149
-msgid "Dati raccolti"
-msgstr ""
-
-#: inc/class-privacy.php:151
-msgid "Conservazione"
-msgstr ""
-
-#: inc/class-privacy.php:153
-msgid "Trasferimenti"
-msgstr ""
-
-#: inc/class-privacy.php:185
-msgid "SEO on-page (titoli, meta, OG, schema, sitemap)"
-msgstr ""
-
-#: inc/class-privacy.php:187
-msgid "Generazione meta tag e dati strutturati per motori di ricerca."
-msgstr ""
-
-#: inc/class-privacy.php:188
-msgid "Non applicabile: nessun dato personale trattato."
-msgstr ""
-
-#: inc/class-privacy.php:189
-#: inc/class-privacy.php:224
-#: inc/class-privacy.php:274
-msgid "Nessuno."
-msgstr ""
-
-#: inc/class-privacy.php:190
-#: inc/class-privacy.php:273
-msgid "Non applicabile."
-msgstr ""
-
-#: inc/class-privacy.php:191
-msgid "Nessun trasferimento. Tutto il rendering è server-side e locale."
-msgstr ""
-
-#: inc/class-privacy.php:198
-msgid "Monitoraggio errori 404"
-msgstr ""
-
-#: inc/class-privacy.php:200
-msgid "Identificare URL non funzionanti per migliorare la qualità del sito."
-msgstr ""
-
-#: inc/class-privacy.php:201
-msgid "Legittimo interesse del titolare (manutenzione tecnica)."
-msgstr ""
-
-#: inc/class-privacy.php:203
-msgid "URL richiesto, referer, indirizzo IP, conteggio, timestamp."
-msgstr ""
-
-#: inc/class-privacy.php:204
-msgid "URL richiesto, referer, conteggio, timestamp. Nessun IP, nessun user-agent."
-msgstr ""
-
-#: inc/class-privacy.php:207
-msgid "Auto-pulizia dopo %d giorni."
-msgstr ""
-
-#: inc/class-privacy.php:210
-msgid "Nessun trasferimento esterno. Dati salvati solo nel database locale."
-msgstr ""
-
-#: inc/class-privacy.php:218
-msgid "Gestore redirect"
-msgstr ""
-
-#: inc/class-privacy.php:220
-msgid "Reindirizzamento URL e conteggio aggregato degli hit."
-msgstr ""
-
-#: inc/class-privacy.php:221
-msgid "Legittimo interesse (manutenzione tecnica)."
-msgstr ""
-
-#: inc/class-privacy.php:222
-msgid "Solo conteggi aggregati (numero hit, ultimo timestamp). Nessun dato personale."
-msgstr ""
-
-#: inc/class-privacy.php:223
-msgid "Conservati finché la regola di redirect è attiva."
-msgstr ""
-
-#: inc/class-privacy.php:232
-msgid "IndexNow (notifica motori di ricerca)"
-msgstr ""
-
-#: inc/class-privacy.php:234
-msgid "Notifica server-to-server di URL aggiornati ai motori di ricerca compatibili (Bing, Yandex)."
-msgstr ""
-
-#: inc/class-privacy.php:235
-msgid "Legittimo interesse del titolare (visibilità del sito)."
-msgstr ""
-
-#: inc/class-privacy.php:236
-msgid "Solo URL pubblici del sito. Nessun dato di utenti."
-msgstr ""
-
-#: inc/class-privacy.php:237
-msgid "Coda interna ripulita dopo invio."
-msgstr ""
-
-#: inc/class-privacy.php:238
-msgid "URL inviati a endpoint pubblici di Bing (Microsoft) e Yandex. Trasferimento extra-UE possibile per Yandex."
-msgstr ""
-
-#: inc/class-privacy.php:254
-#: inc/class-settings.php:708
-msgid "Meta (Facebook) Pixel"
-msgstr ""
-
-#: inc/class-privacy.php:256
-msgid "Misurazione conversioni e remarketing su piattaforme Meta."
-msgstr ""
-
-#: inc/class-privacy.php:257
-#: inc/class-privacy.php:291
-msgid "Consenso (art. 7 GDPR e art. 122 Codice Privacy IT)."
-msgstr ""
-
-#: inc/class-privacy.php:258
-msgid "IP, user-agent, identificatori cookie Meta, eventi di navigazione, URL visitati."
-msgstr ""
-
-#: inc/class-privacy.php:259
-msgid "Definita dalle policy di Meta Platforms Ireland Ltd."
-msgstr ""
-
-#: inc/class-privacy.php:260
-msgid "Trasferimento extra-UE (Stati Uniti) verso Meta Platforms. Necessarie SCC e valutazioni di adeguatezza (Schrems II / DPF)."
-msgstr ""
-
-#: inc/class-privacy.php:268
-msgid "Verifica proprietà sito (search engines)"
-msgstr ""
-
-#: inc/class-privacy.php:270
-msgid "Dimostrare la proprietà del sito ai motori di ricerca."
-msgstr ""
-
-#: inc/class-privacy.php:271
-msgid "Legittimo interesse."
-msgstr ""
-
-#: inc/class-privacy.php:272
-msgid "Solo emissione di meta tag statici nell'HTML. Nessuna chiamata a server esterni."
-msgstr ""
-
-#: inc/class-privacy.php:288
-msgid "Google Analytics 4"
-msgstr ""
-
-#: inc/class-privacy.php:290
-msgid "Misurazione del traffico e analisi del comportamento di navigazione."
-msgstr ""
-
-#: inc/class-privacy.php:292
-msgid "IP, user-agent, identificatori client, eventi, URL visitati, riferimenti, dati dispositivo."
-msgstr ""
-
-#: inc/class-privacy.php:293
-msgid "Definita nelle impostazioni della proprietà GA4 (default 14 mesi)."
-msgstr ""
-
-#: inc/class-privacy.php:295
-msgid "Trasferimento extra-UE (USA) verso Google LLC. Consent Mode v2 attivo: nessun cookie/identificatore prima del consenso. Necessarie SCC e valutazione DPF."
-msgstr ""
-
-#: inc/class-privacy.php:296
-msgid "Trasferimento extra-UE (USA) verso Google LLC. Necessarie SCC e valutazione DPF. ATTENZIONE: Consent Mode v2 disattivato."
-msgstr ""
-
-#: inc/class-privacy.php:301
-msgid "Google Tag Manager"
-msgstr ""
-
-#: inc/class-privacy.php:303
-msgid "Container per il caricamento di tag di terze parti."
-msgstr ""
-
-#: inc/class-privacy.php:304
-msgid "Consenso (in funzione dei tag effettivamente caricati)."
-msgstr ""
-
-#: inc/class-privacy.php:305
-msgid "Dipende dai tag configurati nel container GTM."
-msgstr ""
-
-#: inc/class-privacy.php:306
-msgid "Definita dai singoli servizi caricati via GTM."
-msgstr ""
-
-#: inc/class-privacy.php:307
-msgid "Trasferimento extra-UE (USA) verso Google LLC. Necessarie SCC e valutazione DPF."
-msgstr ""
-
-#: inc/class-privacy.php:312
-msgid "Matomo (self-hosted)"
-msgstr ""
-
-#: inc/class-privacy.php:314
-msgid "Analisi del traffico in modalità privacy-friendly."
-msgstr ""
-
-#: inc/class-privacy.php:315
-msgid "Configurazione: cookieless con anonimizzazione IP. Verificare se il consenso è richiesto in base alle impostazioni del titolare."
-msgstr ""
-
-#: inc/class-privacy.php:316
-msgid "URL visitati, riferimenti, dati aggregati. Cookie disabilitati di default dal plugin."
-msgstr ""
-
-#: inc/class-privacy.php:317
-msgid "Definita dall'admin del Matomo self-hosted."
-msgstr ""
-
-#: inc/class-privacy.php:318
-msgid "Nessun trasferimento extra-UE se l'istanza Matomo è ospitata in UE."
-msgstr ""
-
-#: inc/class-privacy.php:323
-msgid "Plausible Analytics"
-msgstr ""
-
-#: inc/class-privacy.php:325
-msgid "Analisi del traffico cookieless e aggregata."
-msgstr ""
-
-#: inc/class-privacy.php:326
-msgid "Plausible è progettato per non richiedere consenso. Verificare la valutazione del titolare in base al contesto."
-msgstr ""
-
-#: inc/class-privacy.php:327
-#: inc/class-privacy.php:338
-msgid "Dati aggregati senza cookie e senza identificatori persistenti."
-msgstr ""
-
-#: inc/class-privacy.php:328
-msgid "Definita da Plausible Insights OÜ (Estonia, UE)."
-msgstr ""
-
-#: inc/class-privacy.php:329
-msgid "Nessun trasferimento extra-UE. Server in UE (Plausible.io). Possibile self-hosting per controllo totale."
-msgstr ""
-
-#: inc/class-privacy.php:334
-msgid "Umami Analytics"
-msgstr ""
-
-#: inc/class-privacy.php:336
-msgid "Analisi del traffico cookieless."
-msgstr ""
-
-#: inc/class-privacy.php:337
-msgid "Umami non utilizza cookie. Verificare in base al contesto del titolare."
-msgstr ""
-
-#: inc/class-privacy.php:339
-msgid "Definita dall'admin dell'istanza Umami."
-msgstr ""
-
-#: inc/class-privacy.php:340
-msgid "Dipende dall'hosting dell'istanza Umami (raccomandato: UE o self-hosted)."
-msgstr ""
-
-#: inc/class-privacy.php:383
-msgid "SEO title"
-msgstr ""
-
-#: inc/class-privacy.php:384
-msgid "SEO description"
-msgstr ""
-
-#: inc/class-privacy.php:385
-msgid "Canonical URL"
-msgstr ""
-
-#: inc/class-privacy.php:386
-#: inc/class-metabox.php:217
-msgid "Focus keyword"
-msgstr ""
-
-#: inc/class-privacy.php:397
-msgid "Metadati SEO autore"
-msgstr ""
-
-#: inc/class-privacy.php:400
-msgid "Post"
-msgstr ""
-
-#: inc/class-privacy.php:499
-msgid "Il sito utilizza il plugin DB SEO Manager per la gestione dei meta dati SEO. Di seguito sono elencati i trattamenti tecnici attivi che possono interessare la tua privacy."
-msgstr ""
-
-#: inc/class-privacy.php:507
-#: inc/class-settings.php:1082
-msgid "Finalità:"
-msgstr ""
-
-#: inc/class-privacy.php:508
-#: inc/class-settings.php:1083
-msgid "Base giuridica:"
-msgstr ""
-
-#: inc/class-privacy.php:509
-#: inc/class-settings.php:1084
-msgid "Dati raccolti:"
-msgstr ""
-
-#: inc/class-privacy.php:510
-#: inc/class-settings.php:1085
-msgid "Conservazione:"
-msgstr ""
-
-#: inc/class-privacy.php:511
-#: inc/class-settings.php:1086
-msgid "Trasferimenti:"
+#: db-seo-manager.php:147
+#, php-format
+msgid "<strong>DB SEO Manager 1.3.0:</strong> il registro privacy unificato è stato spostato nel nuovo plugin dedicato <a href=\"%s\" target=\"_blank\" rel=\"noopener\">DB Privacy Hub</a>. Installalo per generare automaticamente la Privacy Policy completa del sito."
 msgstr ""
 
 #: inc/class-analyzer.php:108
@@ -500,11 +58,13 @@ msgid "Lunghezza title"
 msgstr ""
 
 #: inc/class-analyzer.php:111
+#, php-format
 msgid "%d caratteri (consigliato 30–60)."
 msgstr ""
 
 #: inc/class-analyzer.php:117
 #: inc/class-metabox.php:206
+#: inc/class-term-seo.php:81
 msgid "Meta description"
 msgstr ""
 
@@ -517,6 +77,7 @@ msgid "Lunghezza description"
 msgstr ""
 
 #: inc/class-analyzer.php:123
+#, php-format
 msgid "%d caratteri (consigliato 120–160)."
 msgstr ""
 
@@ -525,6 +86,7 @@ msgid "Lunghezza contenuto"
 msgstr ""
 
 #: inc/class-analyzer.php:131
+#, php-format
 msgid "%d parole (consigliato ≥ 600 per articoli)."
 msgstr ""
 
@@ -537,6 +99,7 @@ msgid "Un solo H1 nel contenuto."
 msgstr ""
 
 #: inc/class-analyzer.php:141
+#, php-format
 msgid "%d tag H1 trovati. Idealmente uno solo (gestito dal tema)."
 msgstr ""
 
@@ -545,6 +108,7 @@ msgid "Struttura heading"
 msgstr ""
 
 #: inc/class-analyzer.php:148
+#, php-format
 msgid "%d H2, %d H3+ (suggerite almeno 2 H2 per contenuti lunghi)."
 msgstr ""
 
@@ -553,10 +117,12 @@ msgid "Alt text immagini"
 msgstr ""
 
 #: inc/class-analyzer.php:159
+#, php-format
 msgid "Tutte le %d immagini hanno alt."
 msgstr ""
 
 #: inc/class-analyzer.php:160
+#, php-format
 msgid "%d immagini su %d senza alt."
 msgstr ""
 
@@ -565,6 +131,7 @@ msgid "Link interni"
 msgstr ""
 
 #: inc/class-analyzer.php:168
+#, php-format
 msgid "%d link interni (consigliati ≥ 2)."
 msgstr ""
 
@@ -573,6 +140,7 @@ msgid "Densità focus keyword"
 msgstr ""
 
 #: inc/class-analyzer.php:177
+#, php-format
 msgid "%.2f%% (consigliato 0.5–2.5%%)."
 msgstr ""
 
@@ -644,7 +212,72 @@ msgstr ""
 msgid "Leggibilità"
 msgstr ""
 
+#. translators: %s: site name
+#: inc/class-audit.php:91
+#, php-format
+msgid "[%s] Nuove risorse esterne rilevate sul sito"
+msgstr ""
+
+#: inc/class-audit.php:94
+msgid "L'audit schedulato di DB SEO Manager ha rilevato nuove risorse esterne caricate dalla homepage del sito:"
+msgstr ""
+
+#: inc/class-audit.php:102
+msgid "Se queste risorse trattano dati personali potrebbero richiedere consenso o aggiornamento della privacy policy. Verifica nella pagina \"Stato GDPR\" del plugin."
+msgstr ""
+
+#: inc/class-audit.php:408
+msgid "Analytics attivo"
+msgstr ""
+
+#: inc/class-audit.php:412
+msgid "Consent Mode v2 non attivo per GA/GTM"
+msgstr ""
+
+#: inc/class-audit.php:416
+msgid "Anonimizzazione IP disattiva"
+msgstr ""
+
+#: inc/class-audit.php:421
+msgid "Meta Pixel attivo (trasferimento extra-UE)"
+msgstr ""
+
+#: inc/class-audit.php:425
+msgid "Monitor 404 logga IP (sconsigliato)"
+msgstr ""
+
+#. translators: %s: hostname
+#: inc/class-audit.php:436
+#, php-format
+msgid "Risorsa marketing rilevata: %s"
+msgstr ""
+
+#. translators: %s: hostname
+#: inc/class-audit.php:443
+#, php-format
+msgid "Risorsa analytics rilevata: %s"
+msgstr ""
+
+#: inc/class-audit.php:453
+msgid "Hard Privacy attivo"
+msgstr ""
+
+#: inc/class-audit.php:466
+msgid "DB Cookie Manager attivo (banner + consent log + scanner)"
+msgstr ""
+
+#: inc/class-audit.php:470
+#: inc/class-settings.php:1178
+msgid "WP Consent API rilevata"
+msgstr ""
+
+#: inc/class-audit.php:489
+msgid "Integrazioni esterne attive senza alcun consent manager rilevato"
+msgstr ""
+
+#. translators: %s: search query
 #: inc/class-breadcrumbs.php:123
+#, php-format
 msgid "Risultati per \"%s\""
 msgstr ""
 
@@ -656,89 +289,603 @@ msgstr ""
 msgid "Briciole di pane"
 msgstr ""
 
-#: inc/class-settings.php:57
+#: inc/class-consent-gate.php:130
+#: inc/class-consent-gate.php:136
+msgid "2 anni"
+msgstr ""
+
+#: inc/class-consent-gate.php:131
+msgid "Distingue gli utenti per le statistiche di Google Analytics."
+msgstr ""
+
+#: inc/class-consent-gate.php:132
+msgid "Identificatore client pseudonimo"
+msgstr ""
+
+#: inc/class-consent-gate.php:137
+msgid "Mantiene lo stato della sessione GA4."
+msgstr ""
+
+#: inc/class-consent-gate.php:138
+msgid "Identificatore di sessione pseudonimo"
+msgstr ""
+
+#: inc/class-consent-gate.php:149
+msgid "1 minuto"
+msgstr ""
+
+#: inc/class-consent-gate.php:150
+msgid "Limita la frequenza delle richieste dei tag caricati via Google Tag Manager."
+msgstr ""
+
+#: inc/class-consent-gate.php:158
+#: inc/class-consent-gate.php:164
+msgid "90 giorni"
+msgstr ""
+
+#: inc/class-consent-gate.php:159
+msgid "Identifica il browser per la misurazione delle conversioni Meta."
+msgstr ""
+
+#: inc/class-consent-gate.php:160
+msgid "Identificatore browser pseudonimo"
+msgstr ""
+
+#: inc/class-consent-gate.php:165
+msgid "Memorizza l'ultimo click da un annuncio Meta (fbclid)."
+msgstr ""
+
+#: inc/class-consent-gate.php:166
+msgid "Identificatore click pseudonimo"
+msgstr ""
+
+#: inc/class-duplicates.php:37
+#: inc/class-duplicates.php:38
+msgid "Duplicati"
+msgstr ""
+
+#: inc/class-duplicates.php:129
+#: inc/class-settings.php:171
+msgid "Permessi insufficienti."
+msgstr ""
+
+#: inc/class-duplicates.php:133
+msgid "Contenuti duplicati"
+msgstr ""
+
+#: inc/class-duplicates.php:134
+msgid "Titoli e description identici confondono i motori di ricerca (keyword cannibalization). Differenziali o imposta una canonica."
+msgstr ""
+
+#: inc/class-duplicates.php:137
+msgid "Titoli SEO duplicati"
+msgstr ""
+
+#: inc/class-duplicates.php:138
+msgid "Meta description duplicate"
+msgstr ""
+
+#: inc/class-duplicates.php:139
+msgid "Titoli di post duplicati (senza titolo SEO)"
+msgstr ""
+
+#: inc/class-duplicates.php:145
+msgid "Nessun duplicato trovato."
+msgstr ""
+
+#: inc/class-duplicates.php:147
+msgid "Valore"
+msgstr ""
+
+#: inc/class-duplicates.php:147
+msgid "Contenuti coinvolti"
+msgstr ""
+
+#: inc/class-hardening.php:202
+msgid "Accesso negato."
+msgstr ""
+
+#: inc/class-hreflang.php:51
+msgid "Hreflang — DB SEO Manager"
+msgstr ""
+
+#: inc/class-hreflang.php:65
+msgid "Una alternativa per riga, formato: codice-lingua|URL. Esempi: en|https://example.com/en/page/ — x-default|https://example.com/. Il self-reference viene aggiunto automaticamente."
+msgstr ""
+
+#: inc/class-importer.php:53
+#: inc/class-importer.php:54
+msgid "Importa SEO"
+msgstr ""
+
+#: inc/class-importer.php:213
+msgid "Importa meta SEO"
+msgstr ""
+
+#: inc/class-importer.php:218
+msgid "L'importazione legge i meta dal plugin sorgente senza modificarli. Disinstalla l'altro plugin solo dopo aver verificato la migrazione."
+msgstr ""
+
+#. translators: %d = numero di post
+#: inc/class-importer.php:234
+#, php-format
+msgid "%d post rilevato"
+msgid_plural "%d post rilevati"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/class-importer.php:242
+msgid "Nessun meta trovato per questo plugin."
+msgstr ""
+
+#: inc/class-importer.php:246
+msgid "Modalità"
+msgstr ""
+
+#: inc/class-importer.php:249
+msgid "Preserva (non sovrascrive valori già impostati in DB SEO)"
+msgstr ""
+
+#: inc/class-importer.php:253
+msgid "Sovrascrivi (rimpiazza ogni valore presente in DB SEO)"
+msgstr ""
+
+#: inc/class-importer.php:260
+msgid "Avvia importazione"
+msgstr ""
+
+#: inc/class-importer.php:306
+msgid "Errore durante l'importazione."
+msgstr ""
+
+#: inc/class-importer.php:316
+msgid "migrati:"
+msgstr ""
+
+#: inc/class-importer.php:316
+msgid "saltati:"
+msgstr ""
+
+#: inc/class-importer.php:320
+msgid "Completato"
+msgstr ""
+
+#: inc/class-importer.php:321
+msgid "Importazione completata"
+msgstr ""
+
+#: inc/class-importer.php:328
+msgid "Errore di rete."
+msgstr ""
+
 #: inc/class-metabox.php:56
+#: inc/class-settings.php:57
 msgid "DB SEO"
 msgstr ""
 
-#: inc/class-settings.php:66
-#: inc/class-settings.php:96
-msgid "Dashboard"
+#: inc/class-metabox.php:123
+msgid "Seleziona immagine social"
 msgstr ""
 
-#: inc/class-settings.php:67
-#: inc/class-settings.php:219
-#: inc/class-settings.php:254
-msgid "Titoli & Meta"
-msgstr ""
-
-#: inc/class-settings.php:68
-#: inc/class-settings.php:220
-#: inc/class-metabox.php:161
-msgid "Social"
-msgstr ""
-
-#: inc/class-settings.php:69
-#: inc/class-settings.php:221
-msgid "Schema.org"
-msgstr ""
-
-#: inc/class-settings.php:70
-msgid "Sitemap & Robots"
-msgstr ""
-
-#: inc/class-settings.php:71
-#: inc/class-settings.php:223
-msgid "Redirect"
-msgstr ""
-
-#: inc/class-settings.php:72
-#: inc/class-settings.php:224
-msgid "Errori 404"
-msgstr ""
-
-#: inc/class-settings.php:73
-msgid "Analytics & Consent"
-msgstr ""
-
-#: inc/class-settings.php:74
-#: inc/class-settings.php:1014
-msgid "IndexNow"
-msgstr ""
-
-#: inc/class-settings.php:75
-msgid "Verifiche"
-msgstr ""
-
-#: inc/class-settings.php:76
-msgid "Hard Privacy"
-msgstr ""
-
-#: inc/class-settings.php:77
-msgid "Stato GDPR"
-msgstr ""
-
-#: inc/class-settings.php:78
-#: inc/class-settings.php:226
-msgid "Privacy SEO"
-msgstr ""
-
-#: inc/class-settings.php:126
-#: inc/class-settings.php:1219
-#: inc/class-metabox.php:345
-msgid "Seleziona immagine"
-msgstr ""
-
-#: inc/class-settings.php:127
 #: inc/class-metabox.php:124
+#: inc/class-settings.php:127
 msgid "Usa questa immagine"
 msgstr ""
 
-#: inc/class-settings.php:128
-#: inc/class-settings.php:1222
 #: inc/class-metabox.php:125
 #: inc/class-metabox.php:348
+#: inc/class-settings.php:128
+#: inc/class-settings.php:1312
 msgid "Rimuovi"
+msgstr ""
+
+#: inc/class-metabox.php:126
+msgid "Troppo lungo"
+msgstr ""
+
+#: inc/class-metabox.php:127
+msgid "Troppo corto"
+msgstr ""
+
+#: inc/class-metabox.php:128
+msgid "Lunghezza ottimale"
+msgstr ""
+
+#: inc/class-metabox.php:159
+msgid "Generale"
+msgstr ""
+
+#: inc/class-metabox.php:160
+msgid "Avanzate"
+msgstr ""
+
+#: inc/class-metabox.php:161
+#: inc/class-settings.php:69
+#: inc/class-settings.php:228
+msgid "Social"
+msgstr ""
+
+#: inc/class-metabox.php:162
+msgid "Analisi"
+msgstr ""
+
+#: inc/class-metabox.php:191
+msgid "Title SEO"
+msgstr ""
+
+#: inc/class-metabox.php:201
+#, php-format
+msgid "Lascia vuoto per usare il titolo di default. Variabili: %title%, %sitename%, %sep%, %tagline%."
+msgstr ""
+
+#: inc/class-metabox.php:217
+msgid "Focus keyword"
+msgstr ""
+
+#: inc/class-metabox.php:224
+msgid "Parola chiave principale per cui vuoi posizionare questo contenuto."
+msgstr ""
+
+#: inc/class-metabox.php:232
+msgid "URL canonico"
+msgstr ""
+
+#: inc/class-metabox.php:240
+msgid "Lascia vuoto per usare il permalink standard. Compila solo se questo contenuto è duplicato di un altro URL."
+msgstr ""
+
+#: inc/class-metabox.php:245
+#: inc/class-settings.php:293
+msgid "Direttive robots"
+msgstr ""
+
+#: inc/class-metabox.php:248
+msgid "Noindex (escludi dai motori di ricerca)"
+msgstr ""
+
+#: inc/class-metabox.php:252
+msgid "Nofollow (non seguire i link in questa pagina)"
+msgstr ""
+
+#: inc/class-metabox.php:257
+msgid "Tipo Schema.org"
+msgstr ""
+
+#: inc/class-metabox.php:259
+msgid "Auto (default)"
+msgstr ""
+
+#: inc/class-metabox.php:268
+#: inc/class-settings.php:795
+msgid "Nessuno"
+msgstr ""
+
+#: inc/class-metabox.php:271
+msgid "FAQPage, HowTo, Product, Event richiedono dati strutturati custom. Aggiungili via filter dbseo_schema_data."
+msgstr ""
+
+#: inc/class-metabox.php:278
+msgid "Cornerstone content"
+msgstr ""
+
+#: inc/class-metabox.php:281
+msgid "Marca questo contenuto come centrale per la tua strategia SEO."
+msgstr ""
+
+#: inc/class-metabox.php:289
+msgid "OpenGraph (Facebook, LinkedIn)"
+msgstr ""
+
+#: inc/class-metabox.php:291
+msgid "Titolo OG"
+msgstr ""
+
+#: inc/class-metabox.php:296
+msgid "Descrizione OG"
+msgstr ""
+
+#: inc/class-metabox.php:299
+msgid "Immagine OG"
+msgstr ""
+
+#: inc/class-metabox.php:303
+#: inc/class-settings.php:326
+msgid "Twitter / X"
+msgstr ""
+
+#: inc/class-metabox.php:305
+msgid "Titolo Twitter"
+msgstr ""
+
+#: inc/class-metabox.php:310
+msgid "Descrizione Twitter"
+msgstr ""
+
+#: inc/class-metabox.php:313
+msgid "Immagine Twitter"
+msgstr ""
+
+#: inc/class-metabox.php:319
+msgid "Esegui analisi"
+msgstr ""
+
+#: inc/class-metabox.php:323
+msgid "L'analisi viene eseguita interamente nel browser: nessun dato lascia il sito."
+msgstr ""
+
+#: inc/class-metabox.php:345
+#: inc/class-settings.php:1309
+msgid "Cambia immagine"
+msgstr ""
+
+#: inc/class-metabox.php:345
+#: inc/class-settings.php:126
+#: inc/class-settings.php:1309
+msgid "Seleziona immagine"
+msgstr ""
+
+#: inc/class-privacy-declarations.php:82
+msgid "Monitoraggio errori 404 (DB SEO Manager)"
+msgstr ""
+
+#: inc/class-privacy-declarations.php:84
+msgid "Individuare URL non funzionanti e link rotti per correggerli o creare redirect, migliorando la qualità del sito."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:85
+msgid "Legittimo interesse del titolare alla manutenzione tecnica del sito (art. 6.1.f GDPR)."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:86
+msgid "Percorso dell'URL richiesto e della pagina di provenienza (referer), SENZA query string (parametri come token, email, fbclid/gclid vengono scartati), conteggio aggregato e data dell'ultima occorrenza. Nessun indirizzo IP, nessuno user-agent, nessun cookie. I 404 generati dagli amministratori non vengono registrati."
+msgstr ""
+
+#. translators: 1: giorni di conservazione, 2: numero massimo di righe
+#: inc/class-privacy-declarations.php:89
+#, php-format
+msgid "Cancellazione automatica (WP-Cron giornaliero) delle voci non più viste da %1$d giorni; tetto massimo di %2$d righe con eliminazione delle meno rilevanti."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:93
+msgid "Nessuno. Dati salvati solo nel database WordPress locale."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:100
+msgid "Notifica IndexNow ai motori di ricerca (DB SEO Manager)"
+msgstr ""
+
+#: inc/class-privacy-declarations.php:102
+msgid "Notificare ai motori di ricerca compatibili gli URL pubblici appena pubblicati o aggiornati, per un'indicizzazione più rapida."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:103
+msgid "Legittimo interesse del titolare alla visibilità del sito (art. 6.1.f GDPR). Nessun dato personale dei visitatori è coinvolto."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:104
+msgid "Solo URL pubblici delle pagine del sito e la chiave IndexNow del sito. Invio server-to-server: nessun cookie, nessun dato dei visitatori."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:105
+msgid "Coda locale degli URL: voci inviate eliminate automaticamente dopo 7 giorni."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:106
+msgid "URL pubblici inviati all'endpoint api.indexnow.org e condivisi con i motori aderenti al protocollo (es. Microsoft Bing – USA, Yandex – Russia, Seznam – Rep. Ceca, Naver – Corea del Sud). Non si tratta di dati personali."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:124
+msgid "Consenso dell'interessato (art. 6.1.a GDPR e art. 122 Codice Privacy), raccolto tramite il banner cookie: lo script viene caricato solo dopo il consenso alla categoria \"statistiche\"."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:131
+msgid "Statistiche di navigazione con Google Analytics 4 (DB SEO Manager)"
+msgstr ""
+
+#: inc/class-privacy-declarations.php:133
+#: inc/class-privacy-declarations.php:161
+msgid "Misurazione del traffico e analisi statistica dell'uso del sito."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:136
+msgid "Identificatori online pseudonimi (cookie _ga, _ga_*), indirizzo IP (troncato da Google per gli utenti UE), user-agent e dati del dispositivo, pagine visitate, referer, eventi di interazione. Google Consent Mode v2 attivo: default \"denied\" finché l'utente non acconsente."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:137
+msgid "Identificatori online pseudonimi (cookie _ga, _ga_*), indirizzo IP (troncato da Google per gli utenti UE), user-agent e dati del dispositivo, pagine visitate, referer, eventi di interazione."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:138
+msgid "Dati a livello di utente/evento conservati da Google secondo l'impostazione della proprietà GA4 (2 o 14 mesi); cookie _ga fino a 2 anni."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:139
+msgid "Google Ireland Ltd (UE) come responsabile del trattamento; possibile trasferimento extra-UE verso Google LLC (USA), aderente all'EU-US Data Privacy Framework (decisione di adeguatezza), con Clausole Contrattuali Standard (SCC) come garanzia aggiuntiva."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:145
+msgid "Google Tag Manager (DB SEO Manager)"
+msgstr ""
+
+#: inc/class-privacy-declarations.php:147
+msgid "Caricamento e gestione dei tag di misurazione configurati nel contenitore GTM."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:149
+msgid "Indirizzo IP e user-agent necessari al caricamento del contenitore; ulteriori dati (identificatori, eventi, pagine visitate) dipendono dai tag configurati nel contenitore, da documentare separatamente."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:150
+msgid "Definita dai singoli servizi caricati tramite GTM."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:151
+msgid "Google Ireland Ltd (UE); possibile trasferimento extra-UE verso Google LLC (USA), aderente all'EU-US Data Privacy Framework, con Clausole Contrattuali Standard (SCC). Ulteriori destinatari in base ai tag del contenitore."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:159
+msgid "Statistiche di navigazione con Matomo (DB SEO Manager)"
+msgstr ""
+
+#: inc/class-privacy-declarations.php:163
+msgid "Pagine visitate, referer, dati tecnici del dispositivo e indirizzo IP (anonimizzabile nelle impostazioni Matomo). Tracciamento senza cookie (disableCookies) e con rispetto del Do Not Track."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:164
+msgid "Definita nelle impostazioni dell'istanza Matomo (cancellazione automatica dei log grezzi configurabile)."
+msgstr ""
+
+#. translators: %s: host dell'istanza Matomo
+#: inc/class-privacy-declarations.php:168
+#, php-format
+msgid "Dati inviati all'istanza Matomo su %s. Nessun trasferimento extra-UE se l'istanza è ospitata nello SEE; in caso contrario verificare le garanzie del fornitore di hosting."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:171
+msgid "Dati inviati all'istanza Matomo configurata. Nessun trasferimento extra-UE se l'istanza è ospitata nello SEE."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:180
+msgid "Statistiche di navigazione con Plausible Analytics (DB SEO Manager)"
+msgstr ""
+
+#: inc/class-privacy-declarations.php:182
+#: inc/class-privacy-declarations.php:204
+msgid "Misurazione aggregata del traffico, senza profilazione."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:184
+msgid "Pagine visitate, referer, browser, sistema operativo, tipo di dispositivo e Paese (ricavato dall'IP, che non viene memorizzato). Nessun cookie, nessun identificatore persistente: dati solo aggregati."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:186
+msgid "Statistiche aggregate conservate da Plausible Insights OÜ per la durata dell'account del titolare."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:187
+msgid "Definita dall'amministratore dell'istanza Plausible self-hosted."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:189
+msgid "Plausible Insights OÜ (Estonia, UE), server nell'UE. Nessun trasferimento extra-UE."
+msgstr ""
+
+#. translators: %s: host dell'istanza Plausible
+#: inc/class-privacy-declarations.php:192
+#, php-format
+msgid "Istanza Plausible self-hosted su %s. Nessun trasferimento extra-UE se ospitata nello SEE."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:202
+msgid "Statistiche di navigazione con Umami (DB SEO Manager)"
+msgstr ""
+
+#: inc/class-privacy-declarations.php:206
+msgid "Pagine visitate, referer, browser, sistema operativo, tipo di dispositivo e Paese. Nessun cookie; identificatore di sessione derivato da hash giornaliero non persistente."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:207
+msgid "Definita dall'amministratore dell'istanza Umami."
+msgstr ""
+
+#. translators: %s: host dell'istanza Umami
+#: inc/class-privacy-declarations.php:210
+#, php-format
+msgid "Dati inviati all'istanza Umami su %s. Nessun trasferimento extra-UE se ospitata nello SEE (Umami Cloud: verificare la regione scelta e le garanzie del fornitore)."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:222
+msgid "Meta Pixel — misurazione conversioni e remarketing (DB SEO Manager)"
+msgstr ""
+
+#: inc/class-privacy-declarations.php:224
+msgid "Misurazione delle conversioni delle campagne pubblicitarie, creazione di pubblici personalizzati e remarketing sulle piattaforme Meta (Facebook, Instagram)."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:225
+msgid "Consenso dell'interessato (art. 6.1.a GDPR e art. 122 Codice Privacy), raccolto tramite il banner cookie: il Pixel viene caricato solo dopo il consenso alla categoria \"marketing\". Contitolarità con Meta Platforms Ireland Ltd per la raccolta e trasmissione dei dati (art. 26 GDPR, CGUE C-40/17 Fashion ID)."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:226
+msgid "Indirizzo IP, user-agent, identificatori dei cookie Meta (_fbp, _fbc), pagine visitate, referer, eventi di navigazione e di conversione; eventuale abbinamento con l'account Meta dell'utente."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:227
+msgid "Cookie _fbp e _fbc: 90 giorni. Dati ricevuti da Meta conservati secondo le policy di Meta Platforms Ireland Ltd."
+msgstr ""
+
+#: inc/class-privacy-declarations.php:228
+msgid "Trasferimento extra-UE verso Meta Platforms, Inc. (USA), aderente all'EU-US Data Privacy Framework (decisione di adeguatezza), con Clausole Contrattuali Standard (SCC) come garanzia aggiuntiva."
+msgstr ""
+
+#: inc/class-redirects.php:221
+msgid "Origine e destinazione sono obbligatorie."
+msgstr ""
+
+#: inc/class-redirects.php:223
+msgid "URL di destinazione non valida."
+msgstr ""
+
+#: inc/class-redirects.php:226
+msgid "Codice di redirect non valido."
+msgstr ""
+
+#: inc/class-redirects.php:231
+msgid "Espressione regolare non valida."
+msgstr ""
+
+#: inc/class-redirects.php:246
+msgid "Errore di salvataggio (origine già esistente?)."
+msgstr ""
+
+#: inc/class-settings.php:68
+#: inc/class-settings.php:227
+#: inc/class-settings.php:261
+msgid "Titoli & Meta"
+msgstr ""
+
+#: inc/class-settings.php:70
+#: inc/class-settings.php:229
+msgid "Schema.org"
+msgstr ""
+
+#: inc/class-settings.php:71
+msgid "Sitemap & Robots"
+msgstr ""
+
+#: inc/class-settings.php:72
+#: inc/class-settings.php:231
+msgid "Redirect"
+msgstr ""
+
+#: inc/class-settings.php:73
+#: inc/class-settings.php:232
+msgid "Errori 404"
+msgstr ""
+
+#: inc/class-settings.php:74
+msgid "Analytics & Consent"
+msgstr ""
+
+#: inc/class-settings.php:75
+#: inc/class-settings.php:1170
+msgid "IndexNow"
+msgstr ""
+
+#: inc/class-settings.php:76
+msgid "Verifiche"
+msgstr ""
+
+#: inc/class-settings.php:77
+msgid "Hard Privacy"
+msgstr ""
+
+#: inc/class-settings.php:78
+msgid "Stato GDPR"
+msgstr ""
+
+#: inc/class-settings.php:96
+msgid "Dashboard"
 msgstr ""
 
 #: inc/class-settings.php:129
@@ -773,954 +920,890 @@ msgstr ""
 msgid "Audit completato."
 msgstr ""
 
-#: inc/class-settings.php:163
-msgid "Permessi insufficienti."
+#: inc/class-settings.php:146
+msgid "Redirect aggiornato."
 msgstr ""
 
-#: inc/class-settings.php:194
+#: inc/class-settings.php:147
+msgid "Nessun file CSV selezionato."
+msgstr ""
+
+#. translators: 1: imported count, 2: skipped count
+#: inc/class-settings.php:150
+#, php-format
+msgid "Import completato: %1$d redirect importati, %2$d saltati (duplicati o non validi)."
+msgstr ""
+
+#: inc/class-settings.php:202
 msgid "Salva impostazioni"
 msgstr ""
 
-#: inc/class-settings.php:203
+#: inc/class-settings.php:211
 msgid "DB SEO Manager — Dashboard"
 msgstr ""
 
-#: inc/class-settings.php:204
+#: inc/class-settings.php:212
 msgid "Stato delle funzionalità e accesso rapido."
 msgstr ""
 
-#: inc/class-settings.php:210
-msgid "Tutte le integrazioni con servizi esterni sono disattivate per default. Attiva solo ciò che ti serve, dopo aver letto la sezione \"Privacy SEO\"."
+#: inc/class-settings.php:218
+msgid "Tutte le integrazioni con servizi esterni sono disattivate per default. Attiva solo ciò che ti serve. Per la gestione completa della privacy installa il plugin DB Privacy Hub."
 msgstr ""
 
-#: inc/class-settings.php:219
+#: inc/class-settings.php:227
 msgid "Title, description, robots per ogni tipo di contenuto."
 msgstr ""
 
-#: inc/class-settings.php:220
+#: inc/class-settings.php:228
 msgid "OpenGraph e Twitter Card."
 msgstr ""
 
-#: inc/class-settings.php:221
+#: inc/class-settings.php:229
 msgid "JSON-LD per organizzazione, articoli, breadcrumb."
 msgstr ""
 
-#: inc/class-settings.php:222
+#: inc/class-settings.php:230
 msgid "Sitemap"
 msgstr ""
 
-#: inc/class-settings.php:222
+#: inc/class-settings.php:230
 msgid "XML sitemap estesa con immagini."
 msgstr ""
 
-#: inc/class-settings.php:223
+#: inc/class-settings.php:231
 msgid "301/302/307/410 con conteggio aggregato."
 msgstr ""
 
-#: inc/class-settings.php:224
+#: inc/class-settings.php:232
 msgid "Monitor anonimo, nessun IP loggato."
 msgstr ""
 
-#: inc/class-settings.php:225
+#: inc/class-settings.php:233
 msgid "Analytics"
 msgstr ""
 
-#: inc/class-settings.php:225
+#: inc/class-settings.php:233
 msgid "Snippet emessi solo dopo consenso."
 msgstr ""
 
-#: inc/class-settings.php:226
-msgid "Registro dei trattamenti tecnici attivi."
-msgstr ""
-
-#: inc/class-settings.php:237
-#: inc/class-settings.php:1078
+#: inc/class-settings.php:244
 msgid "Attivo"
 msgstr ""
 
-#: inc/class-settings.php:237
-#: inc/class-settings.php:1078
+#: inc/class-settings.php:244
 msgid "Disattivo"
 msgstr ""
 
-#: inc/class-settings.php:259
+#: inc/class-settings.php:266
 msgid "Generali"
 msgstr ""
 
-#: inc/class-settings.php:261
-#: inc/class-settings.php:364
+#: inc/class-settings.php:268
+#: inc/class-settings.php:371
 msgid "Separatore"
 msgstr ""
 
-#: inc/class-settings.php:261
+#: inc/class-settings.php:268
 msgid "Esempio: -, |, »"
 msgstr ""
 
-#: inc/class-settings.php:262
+#: inc/class-settings.php:269
 msgid "Nome del sito"
 msgstr ""
 
-#: inc/class-settings.php:262
+#: inc/class-settings.php:269
 msgid "Lascia vuoto per usare il nome del sito di WP."
 msgstr ""
 
-#: inc/class-settings.php:267
+#: inc/class-settings.php:274
 msgid "Template title & description"
 msgstr ""
 
-#: inc/class-settings.php:270
+#: inc/class-settings.php:277
+#, php-format
 msgid "Variabili disponibili: %title%, %sitename%, %sep%, %tagline%, %excerpt%, %archive_title%, %search_query%, %category%."
 msgstr ""
 
-#: inc/class-settings.php:272
+#: inc/class-settings.php:279
 msgid "Title homepage"
 msgstr ""
 
-#: inc/class-settings.php:273
+#: inc/class-settings.php:280
 msgid "Title post"
 msgstr ""
 
-#: inc/class-settings.php:274
+#: inc/class-settings.php:281
 msgid "Title pagine"
 msgstr ""
 
-#: inc/class-settings.php:275
+#: inc/class-settings.php:282
 msgid "Title archivi"
 msgstr ""
 
-#: inc/class-settings.php:276
+#: inc/class-settings.php:283
 msgid "Title risultati di ricerca"
 msgstr ""
 
-#: inc/class-settings.php:277
+#: inc/class-settings.php:284
 msgid "Title pagina 404"
 msgstr ""
 
-#: inc/class-settings.php:279
+#: inc/class-settings.php:286
 msgid "Description homepage"
 msgstr ""
 
-#: inc/class-settings.php:280
+#: inc/class-settings.php:287
 msgid "Description post (default)"
 msgstr ""
 
-#: inc/class-settings.php:281
+#: inc/class-settings.php:288
 msgid "Description pagine (default)"
 msgstr ""
 
-#: inc/class-settings.php:286
-#: inc/class-metabox.php:245
-msgid "Direttive robots"
-msgstr ""
-
-#: inc/class-settings.php:288
+#: inc/class-settings.php:295
 msgid "Noindex sui risultati di ricerca"
 msgstr ""
 
-#: inc/class-settings.php:289
+#: inc/class-settings.php:296
 msgid "Noindex sulla pagina 404"
 msgstr ""
 
-#: inc/class-settings.php:290
+#: inc/class-settings.php:297
 msgid "Noindex sugli archivi autore"
 msgstr ""
 
-#: inc/class-settings.php:291
+#: inc/class-settings.php:298
 msgid "Noindex sugli archivi per data"
 msgstr ""
 
-#: inc/class-settings.php:292
+#: inc/class-settings.php:299
 msgid "Noindex sugli allegati"
 msgstr ""
 
-#: inc/class-settings.php:305
+#: inc/class-settings.php:312
 msgid "Social — OpenGraph & Twitter"
 msgstr ""
 
-#: inc/class-settings.php:310
+#: inc/class-settings.php:317
 msgid "OpenGraph"
 msgstr ""
 
-#: inc/class-settings.php:312
+#: inc/class-settings.php:319
 msgid "Abilita OpenGraph e Twitter Card"
 msgstr ""
 
-#: inc/class-settings.php:313
+#: inc/class-settings.php:320
 msgid "Immagine OG di default"
 msgstr ""
 
-#: inc/class-settings.php:314
+#: inc/class-settings.php:321
 msgid "Usata quando un post non ha immagine in evidenza né override."
 msgstr ""
 
-#: inc/class-settings.php:319
-#: inc/class-metabox.php:303
-msgid "Twitter / X"
-msgstr ""
-
-#: inc/class-settings.php:324
+#: inc/class-settings.php:331
 msgid "Tipo Twitter Card"
 msgstr ""
 
-#: inc/class-settings.php:325
+#: inc/class-settings.php:332
 msgid "Handle del sito (con o senza @)"
 msgstr ""
 
-#: inc/class-settings.php:338
+#: inc/class-settings.php:345
 msgid "Schema.org — Dati strutturati"
 msgstr ""
 
-#: inc/class-settings.php:343
+#: inc/class-settings.php:350
 msgid "Configurazione"
 msgstr ""
 
-#: inc/class-settings.php:345
+#: inc/class-settings.php:352
 msgid "Abilita output JSON-LD"
 msgstr ""
 
-#: inc/class-settings.php:349
+#: inc/class-settings.php:356
 msgid "Tipo entità"
 msgstr ""
 
-#: inc/class-settings.php:350
+#: inc/class-settings.php:357
 msgid "Organization per aziende/enti, Person per portfolio personali."
 msgstr ""
 
-#: inc/class-settings.php:351
+#: inc/class-settings.php:358
 msgid "Nome entità"
 msgstr ""
 
-#: inc/class-settings.php:352
+#: inc/class-settings.php:359
 msgid "Logo"
 msgstr ""
 
-#: inc/class-settings.php:353
+#: inc/class-settings.php:360
 msgid "Usato come logo dell'organizzazione e immagine principale."
 msgstr ""
 
-#: inc/class-settings.php:354
+#: inc/class-settings.php:361
 msgid "Telefono (opzionale)"
 msgstr ""
 
-#: inc/class-settings.php:355
+#: inc/class-settings.php:362
 msgid "Email (opzionale)"
 msgstr ""
 
-#: inc/class-settings.php:360
+#: inc/class-settings.php:367
 msgid "Breadcrumb"
 msgstr ""
 
-#: inc/class-settings.php:362
+#: inc/class-settings.php:369
 msgid "Abilita briciole di pane"
 msgstr ""
 
-#: inc/class-settings.php:363
+#: inc/class-settings.php:370
 msgid "Etichetta Home"
 msgstr ""
 
-#: inc/class-settings.php:366
+#: inc/class-settings.php:373
 msgid "Inseriscile con shortcode [dbseo_breadcrumbs], blocco \"Briciole di pane\" o template tag dbseo_breadcrumbs() nel tema."
 msgstr ""
 
-#: inc/class-settings.php:380
+#: inc/class-settings.php:387
 msgid "Sitemap & robots.txt"
 msgstr ""
 
-#: inc/class-settings.php:385
+#: inc/class-settings.php:392
 msgid "Sitemap XML"
 msgstr ""
 
-#: inc/class-settings.php:388
+#: inc/class-settings.php:395
 msgid "Abilita sitemap estesa"
 msgstr ""
 
-#: inc/class-settings.php:389
+#: inc/class-settings.php:396
 msgid "Sostituisce la sitemap core di WordPress. URL: /sitemap.xml"
 msgstr ""
 
-#: inc/class-settings.php:396
+#: inc/class-settings.php:403
 msgid "Post type da includere"
 msgstr ""
 
-#: inc/class-settings.php:413
+#: inc/class-settings.php:420
 msgid "Tassonomie da includere"
 msgstr ""
 
-#: inc/class-settings.php:427
+#: inc/class-settings.php:434
 msgid "ID da escludere (CSV)"
 msgstr ""
 
-#: inc/class-settings.php:428
+#: inc/class-settings.php:435
 msgid "Esempio: 12,34,89"
 msgstr ""
 
-#: inc/class-settings.php:434
+#: inc/class-settings.php:441
 msgid "robots.txt virtuale"
 msgstr ""
 
-#: inc/class-settings.php:437
+#: inc/class-settings.php:444
 msgid "Direttive personalizzate"
 msgstr ""
 
-#: inc/class-settings.php:438
+#: inc/class-settings.php:445
 msgid "Aggiunte alle regole di base. Una direttiva per riga."
 msgstr ""
 
-#: inc/class-settings.php:444
+#. translators: %s: robots.txt URL
+#: inc/class-settings.php:451
+#, php-format
 msgid "Anteprima: %s"
 msgstr ""
 
-#: inc/class-settings.php:461
+#: inc/class-settings.php:460
+msgid "Crawler AI"
+msgstr ""
+
+#: inc/class-settings.php:463
+msgid "Blocca selettivamente i crawler AI via robots.txt (Disallow: /). Nessun bot è bloccato di default: è una scelta editoriale. Nota: robots.txt è una richiesta, non una barriera tecnica."
+msgstr ""
+
+#: inc/class-settings.php:482
+msgid "llms.txt"
+msgstr ""
+
+#: inc/class-settings.php:485
+msgid "Abilita llms.txt virtuale"
+msgstr ""
+
+#: inc/class-settings.php:486
+msgid "File informativo per gli LLM (spec llmstxt.org): nome sito, descrizione, pagine chiave e testo custom. Servito su /llms.txt se non esiste un file fisico."
+msgstr ""
+
+#: inc/class-settings.php:488
+msgid "Testo aggiuntivo (Markdown)"
+msgstr ""
+
+#: inc/class-settings.php:489
+msgid "Inserito dopo la descrizione del sito."
+msgstr ""
+
+#: inc/class-settings.php:502
 msgid "Gestione redirect"
 msgstr ""
 
-#: inc/class-settings.php:462
+#: inc/class-settings.php:503
 msgid "301, 302, 307, 410. Conteggio hit aggregato, nessun IP loggato."
 msgstr ""
 
-#: inc/class-settings.php:475
+#: inc/class-settings.php:516
 msgid "Abilita redirect manager"
 msgstr ""
 
-#: inc/class-settings.php:477
+#: inc/class-settings.php:518
 msgid "Non contare gli hit (zero-trust)"
 msgstr ""
 
-#: inc/class-settings.php:478
+#: inc/class-settings.php:519
 msgid "Salta anche il conteggio aggregato. I dati aggregati non sono dati personali, ma alcune policy di privacy zero-trust preferiscono non averne traccia."
 msgstr ""
 
-#: inc/class-settings.php:480
-#: inc/class-settings.php:603
+#: inc/class-settings.php:521
+msgid "Valuta le regole regex solo sui 404"
+msgstr ""
+
+#: inc/class-settings.php:522
+msgid "Le regole esatte restano sempre attive (lookup O(1) via hash). Con molte regex questo azzera il costo sul traffico normale. Da attivare solo se nessuna regex deve intercettare pagine esistenti."
+msgstr ""
+
+#: inc/class-settings.php:524
+#: inc/class-settings.php:639
+#: inc/class-settings.php:694
+#: inc/class-settings.php:986
 msgid "Salva"
 msgstr ""
 
-#: inc/class-settings.php:487
+#: inc/class-settings.php:531
+msgid "Import / Export CSV"
+msgstr ""
+
+#: inc/class-settings.php:535
+msgid "Esporta CSV"
+msgstr ""
+
+#: inc/class-settings.php:541
+msgid "Importa CSV"
+msgstr ""
+
+#: inc/class-settings.php:544
+msgid "Formato: source,target,type,is_regex (con header). Le origini già esistenti vengono saltate."
+msgstr ""
+
+#: inc/class-settings.php:550
 msgid "Aggiungi redirect"
 msgstr ""
 
-#: inc/class-settings.php:496
-#: inc/class-settings.php:536
+#: inc/class-settings.php:559
+#: inc/class-settings.php:599
+#: inc/class-settings.php:630
 msgid "Origine"
 msgstr ""
 
-#: inc/class-settings.php:500
-#: inc/class-settings.php:537
+#: inc/class-settings.php:563
+#: inc/class-settings.php:600
+#: inc/class-settings.php:631
 msgid "Destinazione"
 msgstr ""
 
-#: inc/class-settings.php:504
-#: inc/class-settings.php:538
+#: inc/class-settings.php:567
+#: inc/class-settings.php:601
 msgid "Codice"
 msgstr ""
 
-#: inc/class-settings.php:513
+#: inc/class-settings.php:576
 msgid "Regex"
 msgstr ""
 
-#: inc/class-settings.php:516
+#: inc/class-settings.php:579
 msgid "Aggiungi"
 msgstr ""
 
-#: inc/class-settings.php:528
+#: inc/class-settings.php:591
 msgid "Nessun redirect configurato."
 msgstr ""
 
-#: inc/class-settings.php:539
+#: inc/class-settings.php:602
 msgid "Tipo"
 msgstr ""
 
-#: inc/class-settings.php:540
-#: inc/class-settings.php:633
+#: inc/class-settings.php:603
+#: inc/class-settings.php:724
 msgid "Hit"
 msgstr ""
 
-#: inc/class-settings.php:564
-#: inc/class-settings.php:650
+#: inc/class-settings.php:623
+msgid "Modifica"
+msgstr ""
+
+#: inc/class-settings.php:648
+#: inc/class-settings.php:754
 msgid "Elimina"
 msgstr ""
 
-#: inc/class-settings.php:582
+#: inc/class-settings.php:666
 msgid "Monitor errori 404"
 msgstr ""
 
-#: inc/class-settings.php:583
+#: inc/class-settings.php:667
 msgid "Anonimo per design: nessun IP, nessun user-agent salvato."
 msgstr ""
 
-#: inc/class-settings.php:589
+#: inc/class-settings.php:673
 msgid "Anche se anonimo, il monitor 404 implica un trattamento tecnico (URL richiesti). Attivalo solo se serve davvero alla manutenzione del sito. Base giuridica suggerita: legittimo interesse."
 msgstr ""
 
-#: inc/class-settings.php:601
+#: inc/class-settings.php:685
 msgid "Abilita monitor 404"
 msgstr ""
 
-#: inc/class-settings.php:602
+#: inc/class-settings.php:686
 msgid "Conserva i log per (giorni)"
 msgstr ""
 
-#: inc/class-settings.php:616
-msgid "Nessun 404 registrato."
-msgstr ""
-
-#: inc/class-settings.php:626
-msgid "Svuota log"
-msgstr ""
-
-#: inc/class-settings.php:632
-msgid "URL richiesto"
-msgstr ""
-
-#: inc/class-settings.php:634
-msgid "Ultimo"
-msgstr ""
-
-#: inc/class-settings.php:668
-msgid "Analytics & gestione consenso"
-msgstr ""
-
-#: inc/class-settings.php:669
-msgid "Tutti gli snippet vengono caricati SOLO dopo il consenso esplicito."
-msgstr ""
-
-#: inc/class-settings.php:676
-msgid "Il consent gate riconosce automaticamente DB Cookie Manager, WP Consent API, Cookiebot e Complianz. Per altri sistemi puoi usare il filter dbseo_consent_granted."
-msgstr ""
-
 #: inc/class-settings.php:687
-msgid "Provider analytics"
+msgid "Tetto massimo righe (anti-flooding)"
 msgstr ""
 
 #: inc/class-settings.php:689
-msgid "Abilita integrazione analytics"
+msgid "Logga solo 404 con referer interno"
 msgstr ""
 
-#: inc/class-settings.php:691
-#: inc/class-metabox.php:268
-msgid "Nessuno"
+#: inc/class-settings.php:690
+msgid "Registra solo i link rotti reali del sito, ignorando gli scan dei bot (che non inviano referer o arrivano da fuori)."
 msgstr ""
 
-#: inc/class-settings.php:697
-msgid "Provider"
+#: inc/class-settings.php:692
+msgid "Pattern da ignorare (regex, una per riga)"
 msgstr ""
 
-#: inc/class-settings.php:698
-msgid "ID / Endpoint"
+#: inc/class-settings.php:693
+msgid "Case-insensitive. Default: probe di vulnerabilità (.php, .env, .git) e asset statici."
 msgstr ""
 
-#: inc/class-settings.php:699
-msgid "Vedi le note per il formato richiesto in base al provider scelto."
-msgstr ""
-
-#: inc/class-settings.php:701
-msgid "Google Consent Mode v2 (consigliato per GA4/GTM)"
-msgstr ""
-
-#: inc/class-settings.php:703
-msgid "Anonimizza IP"
-msgstr ""
-
-#: inc/class-settings.php:712
-msgid "Meta Pixel comporta trasferimento extra-UE (USA) e richiede consenso per \"marketing\"."
+#: inc/class-settings.php:707
+msgid "Nessun 404 registrato."
 msgstr ""
 
 #: inc/class-settings.php:717
-msgid "Abilita Meta Pixel"
+msgid "Svuota log"
 msgstr ""
 
-#: inc/class-settings.php:718
-msgid "ID Pixel"
+#: inc/class-settings.php:723
+msgid "URL richiesto"
 msgstr ""
 
-#: inc/class-settings.php:731
-msgid "IndexNow — Notifica motori di ricerca"
+#: inc/class-settings.php:725
+msgid "Ultimo"
 msgstr ""
 
-#: inc/class-settings.php:732
-msgid "Comunicazione server-to-server. Nessun cookie, nessun dato utente."
+#: inc/class-settings.php:737
+msgid "Crea redirect"
 msgstr ""
 
-#: inc/class-settings.php:738
-msgid "Quando attivo, IndexNow invia gli URL pubblicati o aggiornati a Bing, Yandex e altri motori partecipanti. Vengono inviati solo URL pubblici del sito (mai pagine in noindex), in batch ogni ora."
+#: inc/class-settings.php:772
+msgid "Analytics & gestione consenso"
 msgstr ""
 
-#: inc/class-settings.php:749
-msgid "Abilita IndexNow"
-msgstr ""
-
-#: inc/class-settings.php:750
-msgid "Alla prima attivazione viene generata automaticamente una chiave univoca."
-msgstr ""
-
-#: inc/class-settings.php:754
-msgid "Chiave IndexNow"
-msgstr ""
-
-#: inc/class-settings.php:760
-msgid "File di verifica disponibile all'indirizzo: %s"
-msgstr ""
-
-#: inc/class-settings.php:779
-msgid "Verifiche motori di ricerca"
+#: inc/class-settings.php:773
+msgid "Tutti gli snippet vengono caricati SOLO dopo il consenso esplicito."
 msgstr ""
 
 #: inc/class-settings.php:780
-msgid "Solo emissione di meta tag statici. Nessuna chiamata esterna."
+msgid "Il consent gate lavora lato browser (compatibile con la cache di pagina): carica gli script solo dopo il consenso rilevato da DB Cookie Manager (se attivo) o dalla WP Consent API; in fallback rileva Cookiebot e Complianz. Senza alcun consent manager gli script non vengono caricati. Per altri sistemi puoi usare il filter dbseo_consent_granted."
 msgstr ""
 
-#: inc/class-settings.php:787
-msgid "Google Search Console"
+#: inc/class-settings.php:791
+msgid "Provider analytics"
 msgstr ""
 
-#: inc/class-settings.php:787
-msgid "Solo il valore content=\"...\" del meta google-site-verification."
+#: inc/class-settings.php:793
+msgid "Abilita integrazione analytics"
 msgstr ""
 
-#: inc/class-settings.php:788
-msgid "Bing Webmaster"
+#: inc/class-settings.php:801
+msgid "Provider"
 msgstr ""
 
-#: inc/class-settings.php:789
-msgid "Yandex Webmaster"
-msgstr ""
-
-#: inc/class-settings.php:790
-msgid "Pinterest"
+#: inc/class-settings.php:802
+msgid "ID / Endpoint"
 msgstr ""
 
 #: inc/class-settings.php:803
-#: inc/class-settings.php:1010
-msgid "Hard Privacy mode"
+msgid "Vedi le note per il formato richiesto in base al provider scelto."
 msgstr ""
 
-#: inc/class-settings.php:804
-msgid "Disabilita in blocco le integrazioni esterne e applica hardening anti-fingerprinting."
+#: inc/class-settings.php:805
+msgid "Google Consent Mode v2 (consigliato per GA4/GTM)"
 msgstr ""
 
-#: inc/class-settings.php:810
-msgid "Modalità avanzata. Quando attiva, forza la disabilitazione di Analytics, Meta Pixel, IndexNow e applica una serie di hook che riducono fingerprinting e caricamenti di terze parti. Alcune sotto-opzioni (es. Google Fonts) possono rompere visivamente temi che dipendono da risorse esterne. Testa il sito dopo l'attivazione."
+#: inc/class-settings.php:807
+msgid "Anonimizza IP"
 msgstr ""
 
-#: inc/class-settings.php:819
-msgid "Toggle principale"
+#: inc/class-settings.php:812
+msgid "Meta (Facebook) Pixel"
+msgstr ""
+
+#: inc/class-settings.php:816
+msgid "Meta Pixel comporta trasferimento extra-UE (USA) e richiede consenso per \"marketing\"."
+msgstr ""
+
+#: inc/class-settings.php:821
+msgid "Abilita Meta Pixel"
 msgstr ""
 
 #: inc/class-settings.php:822
-msgid "Attiva Hard Privacy"
-msgstr ""
-
-#: inc/class-settings.php:823
-msgid "Forza la soppressione di Analytics, Meta Pixel e IndexNow indipendentemente dalle loro impostazioni individuali."
-msgstr ""
-
-#: inc/class-settings.php:828
-msgid "Hardening attivo (quando Hard Privacy è on)"
-msgstr ""
-
-#: inc/class-settings.php:831
-msgid "Rimuovi script di rilevamento emoji"
-msgstr ""
-
-#: inc/class-settings.php:832
-msgid "WP carica wp-emoji-release.min.js che esegue test di fingerprinting del browser e fa prefetch a s.w.org. Bloccarlo è privacy-friendly."
-msgstr ""
-
-#: inc/class-settings.php:834
-msgid "Rimuovi endpoint oEmbed"
+msgid "ID Pixel"
 msgstr ""
 
 #: inc/class-settings.php:835
-msgid "Disabilita la discovery oEmbed che può esporre dati a terzi."
+msgid "IndexNow — Notifica motori di ricerca"
 msgstr ""
 
-#: inc/class-settings.php:837
-msgid "Rimuovi DNS prefetch verso domini esterni"
+#: inc/class-settings.php:836
+msgid "Comunicazione server-to-server. Nessun cookie, nessun dato utente."
 msgstr ""
 
-#: inc/class-settings.php:838
-msgid "WP aggiunge prefetch automatici a domini Automattic e altri."
+#: inc/class-settings.php:842
+msgid "Quando attivo, IndexNow invia gli URL pubblicati o aggiornati a Bing, Yandex e altri motori partecipanti. Vengono inviati solo URL pubblici del sito (mai pagine in noindex), in batch ogni ora."
 msgstr ""
 
-#: inc/class-settings.php:840
-msgid "Sostituisci Gravatar con avatar locale"
+#: inc/class-settings.php:853
+msgid "Abilita IndexNow"
 msgstr ""
 
-#: inc/class-settings.php:841
-msgid "Gravatar invia hash MD5 dell'email a Automattic. Sostituiamo con un placeholder SVG inline."
+#: inc/class-settings.php:854
+msgid "Alla prima attivazione viene generata automaticamente una chiave univoca."
 msgstr ""
 
-#: inc/class-settings.php:843
-msgid "Blocca Google Fonts (rischio rottura tema)"
+#: inc/class-settings.php:858
+msgid "Chiave IndexNow"
 msgstr ""
 
-#: inc/class-settings.php:844
-msgid "Rimuove dalla queue gli stili che caricano fonts.googleapis.com / fonts.gstatic.com. Verifica il tema dopo."
-msgstr ""
-
-#: inc/class-settings.php:846
-msgid "Disabilita XML-RPC"
-msgstr ""
-
-#: inc/class-settings.php:847
-msgid "Vettore di attacco e di pingback poco usato. Disattivare se non serve a integrazioni esterne (es. app mobile WP)."
-msgstr ""
-
-#: inc/class-settings.php:849
-msgid "Proteggi REST /wp/v2/users dagli anonimi"
-msgstr ""
-
-#: inc/class-settings.php:850
-msgid "Restituisce 401 a richieste non autenticate. Previene enumerazione utenti."
-msgstr ""
-
-#: inc/class-settings.php:863
-msgid "Stato GDPR del sito"
-msgstr ""
-
+#. translators: %s = full key URL
 #: inc/class-settings.php:864
-msgid "Sintesi in tempo reale di ciò che è attivo e cosa il sito potrebbe caricare."
+#, php-format
+msgid "File di verifica disponibile all'indirizzo: %s"
 msgstr ""
 
-#: inc/class-settings.php:882
-msgid "Score GDPR"
+#: inc/class-settings.php:883
+msgid "Verifiche motori di ricerca"
 msgstr ""
 
-#: inc/class-settings.php:886
-msgid "Fattori che influenzano il punteggio"
+#: inc/class-settings.php:884
+msgid "Solo emissione di meta tag statici. Nessuna chiamata esterna."
 msgstr ""
 
-#: inc/class-settings.php:888
-msgid "Nessun fattore rilevante. Il punteggio è al massimo."
+#: inc/class-settings.php:891
+msgid "Google Search Console"
+msgstr ""
+
+#: inc/class-settings.php:891
+msgid "Solo il valore content=\"...\" del meta google-site-verification."
+msgstr ""
+
+#: inc/class-settings.php:892
+msgid "Bing Webmaster"
+msgstr ""
+
+#: inc/class-settings.php:893
+msgid "Yandex Webmaster"
+msgstr ""
+
+#: inc/class-settings.php:894
+msgid "Pinterest"
 msgstr ""
 
 #: inc/class-settings.php:907
-msgid "Audit risorse di terze parti"
+#: inc/class-settings.php:1166
+msgid "Hard Privacy mode"
 msgstr ""
 
-#: inc/class-settings.php:913
-msgid "Eseguito %s fa"
+#: inc/class-settings.php:908
+msgid "Disabilita in blocco le integrazioni esterne e applica hardening anti-fingerprinting."
 msgstr ""
 
-#: inc/class-settings.php:917
-msgid "Mai eseguito"
+#: inc/class-settings.php:914
+msgid "Modalità avanzata. Quando attiva, forza la disabilitazione di Analytics, Meta Pixel, IndexNow e applica una serie di hook che riducono fingerprinting e caricamenti di terze parti. Alcune sotto-opzioni (es. Google Fonts) possono rompere visivamente temi che dipendono da risorse esterne. Testa il sito dopo l'attivazione."
 msgstr ""
 
-#: inc/class-settings.php:924
-msgid "Scansiona la homepage del sito ed elenca le risorse caricate da host esterni (script, immagini, font, iframe). Operazione server-to-server, nessun dato utente coinvolto."
+#: inc/class-settings.php:923
+msgid "Toggle principale"
 msgstr ""
 
-#: inc/class-settings.php:934
-msgid "Riesegui audit"
+#: inc/class-settings.php:926
+msgid "Attiva Hard Privacy"
 msgstr ""
 
-#: inc/class-settings.php:934
-msgid "Esegui audit"
+#: inc/class-settings.php:927
+msgid "Forza la soppressione di Analytics, Meta Pixel e IndexNow indipendentemente dalle loro impostazioni individuali."
+msgstr ""
+
+#: inc/class-settings.php:932
+msgid "Hardening attivo (quando Hard Privacy è on)"
+msgstr ""
+
+#: inc/class-settings.php:935
+msgid "Rimuovi script di rilevamento emoji"
+msgstr ""
+
+#: inc/class-settings.php:936
+msgid "WP carica wp-emoji-release.min.js che esegue test di fingerprinting del browser e fa prefetch a s.w.org. Bloccarlo è privacy-friendly."
+msgstr ""
+
+#: inc/class-settings.php:938
+msgid "Rimuovi endpoint oEmbed"
+msgstr ""
+
+#: inc/class-settings.php:939
+msgid "Disabilita la discovery oEmbed che può esporre dati a terzi."
+msgstr ""
+
+#: inc/class-settings.php:941
+msgid "Rimuovi DNS prefetch verso domini esterni"
+msgstr ""
+
+#: inc/class-settings.php:942
+msgid "WP aggiunge prefetch automatici a domini Automattic e altri."
 msgstr ""
 
 #: inc/class-settings.php:944
-msgid "Errore durante l'audit: %s"
+msgid "Sostituisci Gravatar con avatar locale"
 msgstr ""
 
-#: inc/class-settings.php:966
-msgid "Host"
+#: inc/class-settings.php:945
+msgid "Gravatar invia hash MD5 dell'email a Automattic. Sostituiamo con un placeholder SVG inline."
+msgstr ""
+
+#: inc/class-settings.php:947
+msgid "Blocca Google Fonts (rischio rottura tema)"
+msgstr ""
+
+#: inc/class-settings.php:948
+msgid "Rimuove dalla queue gli stili che caricano fonts.googleapis.com / fonts.gstatic.com. Verifica il tema dopo."
+msgstr ""
+
+#: inc/class-settings.php:950
+msgid "Disabilita XML-RPC"
+msgstr ""
+
+#: inc/class-settings.php:951
+msgid "Vettore di attacco e di pingback poco usato. Disattivare se non serve a integrazioni esterne (es. app mobile WP)."
+msgstr ""
+
+#: inc/class-settings.php:953
+msgid "Proteggi REST /wp/v2/users dagli anonimi"
+msgstr ""
+
+#: inc/class-settings.php:954
+msgid "Restituisce 401 a richieste non autenticate. Previene enumerazione utenti."
 msgstr ""
 
 #: inc/class-settings.php:967
-msgid "Servizio"
+msgid "Stato GDPR del sito"
 msgstr ""
 
 #: inc/class-settings.php:968
-msgid "Categoria"
+msgid "Sintesi in tempo reale di ciò che è attivo e cosa il sito potrebbe caricare."
 msgstr ""
 
-#: inc/class-settings.php:969
-msgid "Consenso"
+#: inc/class-settings.php:978
+msgid "Audit schedulato"
 msgstr ""
 
-#: inc/class-settings.php:970
-msgid "Risorse"
+#: inc/class-settings.php:981
+msgid "Esegui l'audit ogni settimana e avvisami via email se compaiono nuove risorse esterne"
 msgstr ""
 
-#: inc/class-settings.php:997
-msgid "Nessuna risorsa esterna rilevata."
+#: inc/class-settings.php:982
+msgid "Monitoraggio di regressione privacy: se un tema, un plugin o un embed inizia a caricare un nuovo host esterno, ricevi un alert. Un solo avviso per host."
 msgstr ""
 
-#: inc/class-settings.php:1004
-msgid "Stato moduli"
+#: inc/class-settings.php:984
+msgid "Email per gli alert"
 msgstr ""
 
-#: inc/class-settings.php:1011
-msgid "Google Analytics / GTM"
+#: inc/class-settings.php:985
+msgid "Vuota = email amministratore del sito."
+msgstr ""
+
+#: inc/class-settings.php:1008
+msgid "Score GDPR"
 msgstr ""
 
 #: inc/class-settings.php:1012
-msgid "Consent Mode v2"
+msgid "Fattori che influenzano il punteggio"
 msgstr ""
 
-#: inc/class-settings.php:1013
-msgid "Meta Pixel"
+#: inc/class-settings.php:1014
+msgid "Nessun fattore rilevante. Il punteggio è al massimo."
 msgstr ""
 
-#: inc/class-settings.php:1015
-msgid "Monitor 404"
+#: inc/class-settings.php:1033
+msgid "Audit risorse di terze parti"
 msgstr ""
 
-#: inc/class-settings.php:1016
-#: inc/class-settings.php:1021
-msgid "Monitor 404 logga IP"
+#. translators: %s: human readable time difference
+#: inc/class-settings.php:1039
+#, php-format
+msgid "Eseguito %s fa"
 msgstr ""
 
-#: inc/class-settings.php:1017
-msgid "Redirect senza conteggio"
+#: inc/class-settings.php:1043
+msgid "Mai eseguito"
 msgstr ""
 
-#: inc/class-settings.php:1018
-#: inc/class-audit.php:299
-msgid "WP Consent API rilevata"
+#: inc/class-settings.php:1050
+msgid "Scansiona la homepage del sito ed elenca le risorse caricate da host esterni (script, immagini, font, iframe). Operazione server-to-server, nessun dato utente coinvolto."
 msgstr ""
 
-#: inc/class-settings.php:1027
-msgid "attivo"
+#: inc/class-settings.php:1060
+msgid "Riesegui audit"
 msgstr ""
 
-#: inc/class-settings.php:1041
-msgid "Vai al registro privacy →"
+#: inc/class-settings.php:1060
+msgid "Esegui audit"
 msgstr ""
 
-#: inc/class-settings.php:1053
-msgid "Privacy SEO — Registro trattamenti"
+#. translators: %s: error message
+#: inc/class-settings.php:1070
+#, php-format
+msgid "Errore durante l'audit: %s"
 msgstr ""
 
-#: inc/class-settings.php:1054
-msgid "Elenco dei trattamenti tecnici attualmente attivi sul sito, derivati dalle impostazioni del plugin."
-msgstr ""
-
-#: inc/class-settings.php:1059
-msgid "Modulo privacy non disponibile."
-msgstr ""
-
-#: inc/class-settings.php:1067
-msgid "Questo è un registro tecnico interno: il plugin NON è il titolare del trattamento. Usa queste informazioni come base per la tua informativa privacy."
-msgstr ""
-
-#: inc/class-settings.php:1093
-msgid "Vai alla Guida policy di WordPress →"
-msgstr ""
-
-#: inc/class-settings.php:1109
-msgid "Esporta JSON"
-msgstr ""
-
-#: inc/class-settings.php:1112
-msgid "Stampa / PDF"
-msgstr ""
-
-#: inc/class-settings.php:1219
-#: inc/class-metabox.php:345
-msgid "Cambia immagine"
-msgstr ""
-
-#: inc/class-metabox.php:123
-msgid "Seleziona immagine social"
-msgstr ""
-
-#: inc/class-metabox.php:126
-msgid "Troppo lungo"
-msgstr ""
-
-#: inc/class-metabox.php:127
-msgid "Troppo corto"
-msgstr ""
-
-#: inc/class-metabox.php:128
-msgid "Lunghezza ottimale"
-msgstr ""
-
-#: inc/class-metabox.php:159
-msgid "Generale"
-msgstr ""
-
-#: inc/class-metabox.php:160
-msgid "Avanzate"
-msgstr ""
-
-#: inc/class-metabox.php:162
-msgid "Analisi"
-msgstr ""
-
-#: inc/class-metabox.php:191
-msgid "Title SEO"
-msgstr ""
-
-#: inc/class-metabox.php:201
-msgid "Lascia vuoto per usare il titolo di default. Variabili: %title%, %sitename%, %sep%, %tagline%."
-msgstr ""
-
-#: inc/class-metabox.php:224
-msgid "Parola chiave principale per cui vuoi posizionare questo contenuto."
-msgstr ""
-
-#: inc/class-metabox.php:232
-msgid "URL canonico"
-msgstr ""
-
-#: inc/class-metabox.php:240
-msgid "Lascia vuoto per usare il permalink standard. Compila solo se questo contenuto è duplicato di un altro URL."
-msgstr ""
-
-#: inc/class-metabox.php:248
-msgid "Noindex (escludi dai motori di ricerca)"
-msgstr ""
-
-#: inc/class-metabox.php:252
-msgid "Nofollow (non seguire i link in questa pagina)"
-msgstr ""
-
-#: inc/class-metabox.php:257
-msgid "Tipo Schema.org"
-msgstr ""
-
-#: inc/class-metabox.php:259
-msgid "Auto (default)"
-msgstr ""
-
-#: inc/class-metabox.php:271
-msgid "FAQPage, HowTo, Product, Event richiedono dati strutturati custom. Aggiungili via filter dbseo_schema_data."
-msgstr ""
-
-#: inc/class-metabox.php:278
-msgid "Cornerstone content"
-msgstr ""
-
-#: inc/class-metabox.php:281
-msgid "Marca questo contenuto come centrale per la tua strategia SEO."
-msgstr ""
-
-#: inc/class-metabox.php:289
-msgid "OpenGraph (Facebook, LinkedIn)"
-msgstr ""
-
-#: inc/class-metabox.php:291
-msgid "Titolo OG"
-msgstr ""
-
-#: inc/class-metabox.php:296
-msgid "Descrizione OG"
-msgstr ""
-
-#: inc/class-metabox.php:299
-msgid "Immagine OG"
-msgstr ""
-
-#: inc/class-metabox.php:305
-msgid "Titolo Twitter"
-msgstr ""
-
-#: inc/class-metabox.php:310
-msgid "Descrizione Twitter"
-msgstr ""
-
-#: inc/class-metabox.php:313
-msgid "Immagine Twitter"
-msgstr ""
-
-#: inc/class-metabox.php:319
-msgid "Esegui analisi"
-msgstr ""
-
-#: inc/class-metabox.php:323
-msgid "L'analisi viene eseguita interamente nel browser: nessun dato lascia il sito."
-msgstr ""
-
-#: inc/class-hardening.php:223
-msgid "Accesso negato."
-msgstr ""
-
-#: inc/class-audit.php:250
-msgid "Analytics attivo"
-msgstr ""
-
-#: inc/class-audit.php:254
-msgid "Consent Mode v2 non attivo per GA/GTM"
-msgstr ""
-
-#: inc/class-audit.php:258
-msgid "Anonimizzazione IP disattiva"
-msgstr ""
-
-#: inc/class-audit.php:263
-msgid "Meta Pixel attivo (trasferimento extra-UE)"
-msgstr ""
-
-#: inc/class-audit.php:267
-msgid "Monitor 404 logga IP (sconsigliato)"
-msgstr ""
-
-#: inc/class-audit.php:278
-msgid "Risorsa marketing rilevata: %s"
-msgstr ""
-
-#: inc/class-audit.php:285
-msgid "Risorsa analytics rilevata: %s"
-msgstr ""
-
-#: inc/class-audit.php:295
-msgid "Hard Privacy attivo"
-msgstr ""
-
-#: inc/class-importer.php:234
-msgid "%d post rilevato"
-msgid_plural "%d post rilevati"
-msgstr[0] ""
-msgstr[1] ""
-
-#: inc/class-settings.php:953
+#: inc/class-settings.php:1079
+#, php-format
 msgid "Rilevato %d host esterno."
 msgid_plural "Rilevati %d host esterni."
 msgstr[0] ""
 msgstr[1] ""
 
-# Step 1.2.0 — Cookie Manager Alignment
-
-#: inc/class-audit.php:303
-msgid "DB Cookie Manager attivo (banner + consent log + scanner)"
+#: inc/class-settings.php:1092
+msgid "Host"
 msgstr ""
 
-#: inc/class-audit.php:317
-msgid "Integrazioni esterne attive senza alcun consent manager rilevato"
+#: inc/class-settings.php:1093
+msgid "Servizio"
 msgstr ""
 
-#: inc/class-settings.php
-msgid "DB Cookie Manager"
+#: inc/class-settings.php:1094
+msgid "Categoria"
 msgstr ""
 
-#: inc/class-settings.php
-msgid "Voce dichiarata da un altro plugin DB tramite il filter dbseo_processing_register."
+#: inc/class-settings.php:1095
+msgid "Consenso"
 msgstr ""
 
-#: inc/class-settings.php
-msgid "Plugin esterno"
+#: inc/class-settings.php:1096
+msgid "Risorse"
 msgstr ""
 
-#: inc/class-settings.php
-msgid "Trattamento dichiarato da %d altro plugin DB tramite il filter dbseo_processing_register. Le voci marcate \"Plugin esterno\" sono di responsabilità del plugin che le dichiara."
-msgid_plural "Trattamenti dichiarati da %d altri plugin DB tramite il filter dbseo_processing_register. Le voci marcate \"Plugin esterno\" sono di responsabilità del plugin che le dichiara."
-msgstr[0] ""
-msgstr[1] ""
-
-#: inc/class-settings.php
+#: inc/class-settings.php:1099
 msgid "Cookie scritti"
 msgstr ""
 
-#: inc/class-settings.php
+#: inc/class-settings.php:1100
 msgid "Numero di cookie effettivamente rilevati dallo scanner di DB Cookie Manager per questo servizio. Disponibile solo se è stata eseguita una scansione recente del sito."
 msgstr ""
 
-#: inc/class-settings.php
+#: inc/class-settings.php:1139
 msgid "Nessun cookie rilevato dallo scanner per questo servizio (servizio non scansionato o senza cookie)."
 msgstr ""
 
-#: inc/class-settings.php
-msgid "Il consent gate delega a DB Cookie Manager (se attivo) o alla WP Consent API; in fallback rileva Cookiebot e Complianz. Per altri sistemi puoi usare il filter dbseo_consent_granted."
+#: inc/class-settings.php:1150
+msgid "Nessuna risorsa esterna rilevata."
+msgstr ""
+
+#: inc/class-settings.php:1157
+msgid "Stato moduli"
+msgstr ""
+
+#: inc/class-settings.php:1167
+msgid "Google Analytics / GTM"
+msgstr ""
+
+#: inc/class-settings.php:1168
+msgid "Consent Mode v2"
+msgstr ""
+
+#: inc/class-settings.php:1169
+msgid "Meta Pixel"
+msgstr ""
+
+#: inc/class-settings.php:1171
+msgid "Monitor 404"
+msgstr ""
+
+#: inc/class-settings.php:1172
+#: inc/class-settings.php:1181
+msgid "Monitor 404 logga IP"
+msgstr ""
+
+#: inc/class-settings.php:1173
+msgid "Redirect senza conteggio"
+msgstr ""
+
+#: inc/class-settings.php:1177
+msgid "DB Cookie Manager"
+msgstr ""
+
+#: inc/class-settings.php:1187
+msgid "attivo"
+msgstr ""
+
+#: inc/class-settings.php:1189
+msgid "disattivo"
+msgstr ""
+
+#: inc/class-settings.php:1201
+msgid "Vai al registro privacy →"
+msgstr ""
+
+#: inc/class-term-seo.php:70
+msgid "SEO — DB SEO Manager"
+msgstr ""
+
+#: inc/class-term-seo.php:74
+msgid "Titolo SEO"
+msgstr ""
+
+#: inc/class-term-seo.php:77
+msgid "Vuoto = template titoli archivio."
+msgstr ""
+
+#: inc/class-term-seo.php:84
+msgid "Vuota = descrizione del termine."
+msgstr ""
+
+#: inc/class-term-seo.php:88
+msgid "URL canonica"
+msgstr ""
+
+#: inc/class-term-seo.php:92
+msgid "Indicizzazione"
+msgstr ""
+
+#: inc/class-term-seo.php:96
+msgid "Noindex (escludi da motori di ricerca e sitemap)"
+msgstr ""
+
+#: inc/class-wp-privacy-tools.php:92
+#: inc/class-wp-privacy-tools.php:100
+msgid "DB SEO Manager (meta SEO autoriali)"
+msgstr ""
+
+#: inc/class-wp-privacy-tools.php:173
+msgid "Post"
+msgstr ""
+
+#: inc/class-wp-privacy-tools.php:178
+msgid "Metadati SEO autore"
+msgstr ""
+
+#: inc/class-wp-privacy-tools.php:244
+msgid "DB SEO Manager: i metadati SEO dei contenuti pubblicati dall'utente (titolo SEO, descrizione, canonical, OpenGraph, direttive robots, hreflang…) sono stati conservati: sono contenuto editoriale del sito, non dati personali dell'autore, e la loro cancellazione comprometterebbe l'indicizzazione delle pagine. Se contengono dati personali, modificarli manualmente dall'editor."
 msgstr ""

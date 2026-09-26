@@ -14,7 +14,7 @@
 - **XML sitemap** — extended index + per-type/taxonomy sub-sitemaps with image extension, paginated at 1000 URLs/file, transient-cached
 - **Virtual robots.txt** — editable rules with automatic sitemap reference
 - **Redirect manager** — 301/302/307/410, regex support with capture groups, anonymous aggregated hit counters (no IP, no user-agent), optional zero-counting mode
-- **Anonymous 404 monitor** — URL + count + last_seen only. No IP. No user-agent. Auto-cleanup via WP-Cron.
+- **Anonymous 404 monitor** — URL path + referer path + count + last_seen only. Query strings stripped (no tokens, emails, fbclid/gclid). No IP. No user-agent. Auto-cleanup via WP-Cron.
 - **Breadcrumbs** — accessible `<nav>` markup, shortcode, Gutenberg block, template tag, JSON-LD `BreadcrumbList`
 - **Content analyzer** — word count, heading structure, link analysis, image alt audit, focus keyword density, readability (Gulpease for Italian, Flesch for English) — runs entirely on your server, no external API
 - **Live SERP preview** — real-time Google-style preview in the post editor with character counters
@@ -28,18 +28,17 @@
 - **GitHub auto-updates** — receive updates in the WordPress admin like any wp.org plugin
 
 ### GDPR & privacy
-- **Consent-gated analytics** — GA4, GTM, Matomo, Plausible, Umami, Meta Pixel. All scripts require explicit consent.
-- **WP Consent API full registration** — declares plugin, services, and per-cookie metadata to compatible consent managers (Complianz, Real Cookie Banner, GDPR Cookie Compliance). Falls back to direct cookie detection for DB Cookie Manager, Cookiebot, Complianz.
-- **Google Consent Mode v2** — emits `denied` defaults as the first script on the page when GA4/GTM is enabled
+- **Consent-gated analytics** — GA4, GTM, Matomo, Plausible, Umami, Meta Pixel. All scripts require explicit consent. The gate runs in the browser (idempotent JS loader), so it is **safe with full-page caching**: the HTML is identical for every visitor.
+- **WP Consent API registration** — declares compliance via `wp_consent_api_registered_{plugin}` and registers the cookies set by the configured trackers with `wp_add_cookie_info()`. Consent sources, in order: DB Cookie Manager (`window.DBCM`), WP Consent API, Cookiebot/Complianz.
+- **Google Consent Mode v2** — always emits `denied` defaults as the first script on the page when GA4/GTM is enabled; sends `gtag('consent','update', …)` when consent is given
 - **Hard Privacy mode** — global toggle that suppresses all external integrations and applies anti-fingerprinting hardening: emoji script strip, oEmbed strip, DNS prefetch strip, Gravatar replacement with inline SVG, optional Google Fonts strip, XML-RPC disable, REST users endpoint protection
 - **Third-party audit** — on-demand homepage scan that identifies external resources by category (analytics, advertising, fonts, embeds, captchas, CDNs) and consent requirement, against a catalog of 30+ known hosts
 - **Scheduled audit with alerts** — weekly automatic scan with email notification when a new external host appears (privacy regression monitoring; one alert per host)
 - **AI crawler control** — selectively block known AI crawlers (GPTBot, ClaudeBot, Google-Extended, PerplexityBot, CCBot, Bytespider and more) via robots.txt; nothing blocked by default
 - **llms.txt** — optional virtual llms.txt (llmstxt.org spec) with site info, key pages and custom Markdown
 - **GDPR status dashboard** — synthetic 0-100 score with breakdown of contributing factors and live module status
-- **Auto-generated privacy register** — dynamic list of active technical processings with legal basis, retention, extra-EU transfer notes
-- **Register export** — JSON for compliance tooling, print-ready HTML for browser-native PDF (no embedded library)
-- **WP Privacy Tools integration** — exporter and eraser for user-attached SEO meta (GDPR Art. 15 & 17)
+- **Processing declarations to DB Privacy Hub** — the active processings (404 monitor, IndexNow, analytics provider, Meta Pixel) are declared dynamically to the unified register of [DB Privacy Hub](https://www.davidebertolino.it/progetti/db-privacy-hub/), with legal basis, retention and extra-EU transfers
+- **WP Privacy Tools integration** — exporter for author-attached SEO meta (GDPR Art. 15); the eraser (Art. 17) retains post SEO meta as editorial content and explains why
 
 ---
 
@@ -48,13 +47,13 @@
 This plugin's defaults are deliberately conservative:
 
 - All external integrations (analytics, pixels, IndexNow) are **off** out of the box
-- The 404 monitor never logs IP addresses or user-agents
+- The 404 monitor never logs IP addresses or user-agents, and strips query strings from URL and referer
 - The redirect log only stores aggregated hit counters — and can be switched to zero-counting if even aggregates are unwanted
 - No phone-home for licensing or telemetry — updates pull from GitHub Releases only
 - No Google Fonts, no remote CDN for core functionality, no avatar fetching from the plugin itself
 - Uninstall removes all stored data (tables, options, post meta, transients)
 
-The "Privacy SEO" admin page generates a real-time register of active technical processings with suggested legal basis, retention period, and extra-EU transfer notes — ready to copy into your privacy policy or export as JSON / print-ready HTML.
+The register of processing activities and the Privacy Policy live in **DB Privacy Hub** (the former "Privacy SEO" page was moved there in 1.3.0): SEO Manager declares its active processings to the Hub automatically, based on the actual settings.
 
 For sites that want to go further, the **Hard Privacy mode** acts as a global kill-switch for external integrations and adds optional anti-fingerprinting hardening (emoji script strip, oEmbed removal, DNS prefetch filtering, Gravatar replacement, XML-RPC disable, REST users protection). It is opt-in and modular — every sub-option can be turned on or off independently.
 
@@ -90,7 +89,7 @@ The plugin auto-updates from GitHub — you'll receive update notifications dire
 
 The plugin is built around a single bootstrap singleton (`DBSEO_Core`) that lazy-loads modules from `inc/`. Each module is independent and can be deactivated via settings without breaking the others.
 
-The frontend output (`<head>` tags, JSON-LD, sitemap) is fully server-rendered with **zero external HTTP calls** for core functionality. Analytics scripts pass through `DBSEO_Consent_Gate`, which evaluates consent in this order: `dbseo_consent_granted` filter → WP Consent API → DB Cookie Manager cookie → Cookiebot/Complianz cookies → default DENIED.
+The frontend output (`<head>` tags, JSON-LD, sitemap) is fully server-rendered with **zero external HTTP calls** for core functionality. Analytics scripts pass through `DBSEO_Consent_Gate`. The server only emits the Consent Mode v2 `denied` defaults and the tracker configuration; the JS loader (`assets/js/consent-listener.js`) injects each script once consent for its category is detected in the browser: DB Cookie Manager (`DBCM.hasConsent`, `dbcm:ready`, `dbcm:consent`) → WP Consent API (`wp_has_consent`, `wp_listen_for_consent_change`) → Cookiebot/Complianz → default DENIED. With no consent manager at all, scripts are not loaded. The `dbseo_consent_granted` filter can still force a service server-side (`true` = always printed, `false` = never).
 
 The sitemap uses transient caching with automatic invalidation on `save_post`/`edited_term`. The 404 monitor and redirect logger use `INSERT ... ON DUPLICATE KEY UPDATE` with hash-based primary keys for O(1) lookups and atomic increments.
 
@@ -98,7 +97,7 @@ The sitemap uses transient caching with automatic invalidation on `save_post`/`e
 
 ## Configuration
 
-The admin UI is split into 13 tabs under **DB SEO** in the sidebar:
+The admin UI is split into these pages under **DB SEO** in the sidebar:
 
 | Tab | Purpose |
 |-----|---------|
@@ -114,7 +113,8 @@ The admin UI is split into 13 tabs under **DB SEO** in the sidebar:
 | Verification | Search engine verification meta tags |
 | Hard Privacy | Master toggle + 7 anti-fingerprinting hardening modules |
 | GDPR Status | Synthetic score, third-party audit, live module status |
-| Privacy SEO | Live register of active technical processings, JSON / print-PDF export |
+| Import | Migration from Yoast SEO, Rank Math, All in One SEO |
+| Duplicates | Duplicate SEO titles, meta descriptions and post titles |
 
 Each post/page/CPT also gets a metabox with four tabs (General, Advanced, Social, Analysis) including live SERP preview and on-demand content analysis.
 
@@ -126,13 +126,40 @@ When **DB Cookie Manager 3.0.2+** is installed alongside SEO Manager, the two pl
 
 **What you get out of the box:**
 
-- The consent gate uses the Cookie Manager as authoritative consent source via `DBCM_Consent_API::has_consent()`, with WP Consent API as the primary path when installed.
-- The JS consent listener propagates user choices to Google Consent Mode v2 in real time via `gtag('consent','update', ...)`.
-- The Cookie Manager declares its own three processing activities (consent collection, consent log, cookie scanner) into the SEO Manager's privacy register via the `dbseo_processing_register` filter. They appear in `Privacy SEO` with a "🔌 Plugin esterno" badge.
+- The consent gate uses the Cookie Manager as authoritative consent source in the browser (`window.DBCM.hasConsent()`, events `dbcm:ready` / `dbcm:consent`): trackers load without page reload as soon as the visitor accepts, and cached pages stay correct.
+- The JS loader propagates user choices to Google Consent Mode v2 in real time via `gtag('consent','update', ...)`.
+- Both plugins declare their own processing activities to **DB Privacy Hub** via `dbph_processing_register` (the Cookie Manager: consent collection, consent log, cookie scanner; the SEO Manager: see below). They appear in `Privacy → Registro trattamenti`.
 - The audit page enriches each external host finding with the cookies actually observed by the Cookie Manager scanner, shown in a "🍪 Cookie scritti" column.
 - The GDPR Status dashboard recognizes the Cookie Manager and awards a `+5` bonus, plus a `−15` penalty if external integrations are active without any consent manager at all.
 
-**Without the Cookie Manager**, none of this is broken: the consent gate falls back to Cookiebot/Complianz detection, the audit table omits the cookie column, and the privacy register shows only the SEO Manager's own activities.
+**Without the Cookie Manager**, none of this is broken: the consent gate falls back to WP Consent API or Cookiebot/Complianz detection (and loads nothing if no consent manager is present), and the audit table omits the cookie column.
+
+---
+
+## Integrazione ecosistema DB privacy
+
+Quando uno o più di questi plugin sono installati, DB SEO Manager li sfrutta automaticamente — senza configurazione.
+
+### Consent gate per analytics e Meta Pixel
+Gli snippet GA4, GTM, Matomo, Plausible, Umami e Meta Pixel non sono mai stampati nell'HTML: il PHP emette solo il default Google Consent Mode v2 `denied` e la configurazione, e un loader JS idempotente inietta ogni script solo quando il consenso per la sua categoria (`statistics`, `marketing`; filtrabile con `dbseo_consent_category`) risulta concesso nel browser — DB Cookie Manager (`window.DBCM`, eventi `dbcm:ready` / `dbcm:consent`), WP Consent API (`wp_has_consent`, `wp_listen_for_consent_change`), Cookiebot/Complianz. L'HTML è identico per tutti i visitatori: nessun problema con la cache di pagina. Senza consent manager gli script non vengono caricati. Override site-wide: filter `dbseo_consent_granted` (`true` = sempre, `false` = mai, `null` = gate client-side).
+
+### Dichiarazione trattamenti al registro privacy unificato
+Quando **DB Privacy Hub 1.0.0+** è installato, DB SEO Manager dichiara automaticamente fino a 4 trattamenti nel pannello "Privacy → Registro trattamenti", in base alle impostazioni effettive (filter `dbph_processing_register`; con Hard Privacy attivo analytics, Pixel e IndexNow non vengono dichiarati):
+
+| ID | Quando appare |
+|---|---|
+| `dbseo_monitor_404` | monitor 404 attivo |
+| `dbseo_indexnow` | IndexNow attivo |
+| `dbseo_analytics` | analytics attivi con provider configurato (GA4, GTM, Matomo, Plausible o Umami — testo, base giuridica e trasferimenti specifici per provider) |
+| `dbseo_meta_pixel` | Meta Pixel attivo con ID configurato |
+
+SEO on-page, sitemap, redirect (solo contatori aggregati) e meta tag di verifica non trattano dati personali e non vengono dichiarati.
+
+### DSAR routing via Privacy Hub
+Exporter ed eraser si registrano su `dbph_user_data_exporters` / `dbph_user_data_erasers` quando l'Hub è presente, e in fallback direttamente su `wp_privacy_personal_data_exporters` / `wp_privacy_personal_data_erasers` (saltati se esiste `DBPH_DSAR`, per evitare doppie registrazioni). L'export (art. 15) include i meta SEO personalizzati sui post dell'autore (16 chiavi, incluso `_dbseo_hreflang`). L'eraser (art. 17) **conserva** i meta SEO dei post — contenuto editoriale, non dati personali: cancellarli distruggerebbe l'indicizzazione — e lo segnala con `items_retained` e un messaggio; cancella solo lo user meta del plugin.
+
+### Marker `DBSEO_DSAR_AVAILABLE`
+Il file principale definisce `DBSEO_DSAR_AVAILABLE = true` (con il blocco "Privacy capabilities" nell'header): indica al generatore di Privacy Policy dell'Hub che il plugin implementa la procedura DSAR.
 
 ---
 
@@ -144,10 +171,22 @@ add_filter( 'dbseo_meta_title', function( $title, $meta ) {
     return $title;
 }, 10, 2 );
 
-// Force consent for a specific service (e.g., from your custom consent system)
+// Site-wide override for a service: true = always printed server-side,
+// false = never loaded, null = client-side consent gate (default).
+// Must NOT depend on the visitor (cookies): the page may be cached.
 add_filter( 'dbseo_consent_granted', function( $default, $service, $category ) {
-    return my_custom_consent_check( $category );
+    return 'matomo' === $service ? true : $default;
 }, 10, 3 );
+
+// Move a service to another consent category
+add_filter( 'dbseo_consent_category', function( $category, $service ) {
+    return 'plausible' === $service ? 'statistics-anonymous' : $category;
+}, 10, 2 );
+
+// Keep selected query args in the 404 log (default: none)
+add_filter( 'dbseo_404_allowed_query_args', function( $args ) {
+    return array( 'lang' );
+} );
 
 // Add custom JSON-LD nodes
 add_filter( 'dbseo_schema_data', function( $graph, $context ) {
@@ -162,9 +201,10 @@ add_filter( 'dbseo_hreflang_alternatives', function( $alts, $meta ) {
     return array( 'en' => 'https://example.com/en/page' );
 }, 10, 2 );
 
-// Declare your plugin's own processing activities into the SEO Manager's
-// privacy register (DB ecosystem pattern, used by DB Cookie Manager 3.0.1+).
-add_filter( 'dbseo_processing_register', function( $register ) {
+// Declare your plugin's own processing activities into the unified
+// register of DB Privacy Hub (the legacy dbseo_processing_register filter
+// is no longer applied by SEO Manager since 1.3.0).
+add_filter( 'dbph_processing_register', function( $register ) {
     $register[] = array(
         'id'             => 'myplugin_form_submissions',
         'label'          => __( 'Form submissions', 'myplugin' ),
@@ -185,7 +225,7 @@ add_filter( 'dbseo_consent_mode_signal_map', function( $map ) {
 } );
 ```
 
-Other filters: `dbseo_canonical_url`, `dbseo_robots_directives`, `dbseo_sitemap_post_types`, `dbseo_sitemap_exclude_ids`, `dbseo_breadcrumb_items`, `dbseo_404_should_ignore`, `dbseo_consent_mode_defaults`, `dbseo_consent_mode_signal_map`, `dbseo_processing_register`.
+Other filters: `dbseo_canonical_url`, `dbseo_robots_directives`, `dbseo_sitemap_post_types`, `dbseo_sitemap_exclude_ids`, `dbseo_breadcrumb_items`, `dbseo_404_should_ignore`, `dbseo_404_allowed_query_args`, `dbseo_consent_mode_defaults`, `dbseo_consent_mode_signal_map`, `dbseo_consent_category`, `dbseo_ga4_config`, `dbseo_plausible_script_url`.
 
 Actions: `dbseo_redirect_before`, `dbseo_redirect_after`, `dbseo_404_logged`, `dbseo_meta_saved`, `dbseo_indexnow_flushed`.
 
@@ -277,17 +317,50 @@ This project is licensed under the [GPL v2 or later](LICENSE).
 
 Plugin WordPress per la SEO completa, progettato secondo i principi del GDPR.
 
-L'interfaccia di amministrazione è in italiano. Tutte le integrazioni con servizi esterni (Google Analytics, Tag Manager, Meta Pixel, IndexNow) sono **disattivate di default**: vanno abilitate esplicitamente dopo aver letto la pagina "Privacy SEO" che genera il registro tecnico dei trattamenti attivi sul sito, con base giuridica suggerita, periodo di conservazione e note sui trasferimenti extra-UE.
+L'interfaccia di amministrazione è in italiano. Tutte le integrazioni con servizi esterni (Google Analytics, Tag Manager, Meta Pixel, IndexNow) sono **disattivate di default**: vanno abilitate esplicitamente. I trattamenti attivi (monitor 404, IndexNow, analytics, Meta Pixel) vengono dichiarati automaticamente al registro unificato di **DB Privacy Hub**, con base giuridica, conservazione e trasferimenti extra-UE.
 
-Gli snippet di tracciamento vengono caricati **solo dopo il consenso**: il consent gate delega a `DBCM_Consent_API::has_consent()` quando DB Cookie Manager 3.0.0+ è installato, oppure usa la WP Consent API (`wp_has_consent`) come strada principale, con fallback su Cookiebot e Complianz per siti senza ecosistema DB. Quando l'utente cambia consenso, un listener JavaScript dedicato propaga le scelte a Google Consent Mode v2 (`gtag('consent','update', ...)`) senza ricaricare la pagina. Il monitor 404 è anonimo per design (mai IP, mai user-agent). Il log redirect contiene solo conteggi aggregati — e può essere disattivato del tutto in modalità zero-trust.
+Gli snippet di tracciamento vengono caricati **solo dopo il consenso**, lato browser (compatibile con la cache di pagina): il loader JS usa DB Cookie Manager (`window.DBCM`) quando presente, altrimenti la WP Consent API, con fallback su Cookiebot e Complianz per siti senza ecosistema DB; senza consent manager non carica nulla. Quando l'utente cambia consenso, gli script vengono caricati senza ricaricare la pagina e le scelte sono propagate a Google Consent Mode v2 (`gtag('consent','update', ...)`). Il monitor 404 è anonimo per design (mai IP, mai user-agent, query string scartate). Il log redirect contiene solo conteggi aggregati — e può essere disattivato del tutto in modalità zero-trust.
 
 La pagina **Hard Privacy** è una modalità avanzata che disabilita in blocco le integrazioni esterne e applica una serie di hardening anti-fingerprinting: rimozione degli script di rilevamento emoji di WordPress, blocco del prefetch DNS verso domini terzi, sostituzione di Gravatar con un avatar locale SVG, blocco opzionale di Google Fonts, disabilitazione di XML-RPC, protezione dell'endpoint REST `/wp/v2/users` dalle enumerazioni anonime.
 
-La pagina **Stato GDPR** mostra un punteggio sintetico 0-100 calcolato sulle impostazioni attive, e include un audit on-demand che analizza la homepage del sito per identificare quali risorse di terze parti vengono effettivamente caricate dal tema e dagli altri plugin (analytics, advertising, font, embed, captcha, CDN). Quando il DB Cookie Manager 3.0.2+ è installato, l'audit arricchisce ogni host noto con i cookie effettivamente rilevati dallo scanner del Cookie Manager, mostrandoli in una colonna "🍪 Cookie scritti". Il registro privacy è esportabile in JSON e in HTML stampabile (PDF nativo del browser, senza librerie embedded), e accoglie automaticamente i trattamenti dichiarati da altri plugin DB tramite il filter `dbseo_processing_register` (badge "Plugin esterno").
+La pagina **Stato GDPR** mostra un punteggio sintetico 0-100 calcolato sulle impostazioni attive, e include un audit on-demand che analizza la homepage del sito per identificare quali risorse di terze parti vengono effettivamente caricate dal tema e dagli altri plugin (analytics, advertising, font, embed, captcha, CDN). Quando il DB Cookie Manager 3.0.2+ è installato, l'audit arricchisce ogni host noto con i cookie effettivamente rilevati dallo scanner del Cookie Manager, mostrandoli in una colonna "🍪 Cookie scritti". Il registro dei trattamenti e la Privacy Policy sono gestiti da DB Privacy Hub, che raccoglie le dichiarazioni di tutti i plugin DB tramite il filter `dbph_processing_register`.
 
 La disinstallazione rimuove completamente tutti i dati persistenti. Il plugin segue gli standard di sviluppo dei plugin di Davide Bertolino: auto-aggiornamento da GitHub, design system condiviso, nessuna dipendenza SaaS, accessibilità WCAG 2.1 AA, installabile in 30 secondi.
 
 ## Changelog
+
+### 1.5.0 — 2026-09 — Privacy Hub declarations, cache-safe consent gate, query-less 404 log
+
+**Processing declarations to DB Privacy Hub (restored)**
+- Since 1.3.0 the plugin declared no processing at all: `DBSEO_Privacy` (`inc/class-privacy.php`) was no longer loaded and the legacy filter no longer applied. New class `DBSEO_Privacy_Declarations` (`inc/class-privacy-declarations.php`) hooked to `dbph_processing_register`, with entries built from the actual settings: `dbseo_monitor_404`, `dbseo_indexnow`, `dbseo_analytics` (per provider: GA4/GTM → Google Ireland + US transfer under EU-US DPF with SCC; Matomo/Umami → instance host; Plausible → EU cloud or self-hosted), `dbseo_meta_pixel` (joint controllership art. 26, US transfer DPF + SCC). All 8 contract fields. With Hard Privacy on, analytics, Pixel and IndexNow are not declared.
+- `dbph_processing_register` only: the legacy `dbseo_processing_register` is applied solely by the Hub (merged with id de-duplication), so hooking both would be redundant.
+- Dead file `inc/class-privacy.php` removed.
+
+**Cache-safe consent gate (high priority)**
+- Before: consent evaluated server-side from the visitor's cookies → with full-page caching, the page rendered for a visitor who had accepted (Consent Mode `granted` + inline GA4/Pixel snippets) was served to everyone.
+- Now: Consent Mode v2 default is ALWAYS `denied` for `ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`; scripts are injected by an idempotent JS loader (`assets/js/consent-listener.js`) once consent is detected via `DBCM.hasConsent` / `dbcm:ready` / `dbcm:consent`, `wp_has_consent` / `wp_listen_for_consent_change`, Cookiebot/Complianz; `gtag('consent','update', …)` is sent on consent. No consent manager → no scripts (unchanged behavior).
+- `dbseo_consent_granted` kept: `true` prints the snippet server-side (with a `granted` consent update), `false` excludes it, `null` = client-side gate. `dbseo_consent_mode_defaults`, `dbseo_consent_mode_signal_map`, `dbseo_ga4_config`, `dbseo_plausible_script_url` unchanged. New `dbseo_consent_category`.
+- GTM `<noscript>` iframe only when GTM is forced server-side (consent cannot be checked without JS).
+
+**Fixes**
+- Meta Pixel was never output when analytics were disabled (it lived inside `output_analytics_head`, which returned early): it is now an independent service.
+- JS consent update: `dataLayer.push(['consent','update',…])` is not understood by Google; now a `window.gtag` stub + `gtag('consent','update', …)`.
+- WP Consent API: `wp_register_consent_plugin()` / `wp_register_consent_service()` do not exist in the Consent API. Replaced with `wp_consent_api_registered_{plugin_basename}` and `wp_add_cookie_info()` for the cookies of the configured trackers (`_ga`, `_ga_*`, `_dc_gtm_*`, `_fbp`, `_fbc`).
+- Hard Privacy is now honored by the consent gate (the `option_*` filter was added after the Core settings cache was already populated).
+- Hard Privacy, complete: the ineffective `option_*` filter has been removed; new helper `DBSEO_Core::is_hard_privacy()` checked directly by IndexNow (no hooks, no cron — any existing `dbseo_cron_indexnow_flush` event is cleared — and `flush_queue()` never sends requests), consent gate, Privacy Hub declarations, privacy score and the "Module status" / dashboard cards. Saved flags are never overwritten: turning Hard Privacy off restores the previous settings.
+- Deactivation now also clears the `dbseo_cron_404_cleanup` and `dbseo_cron_audit` events.
+
+**404 monitor — data minimization**
+- Query strings stripped from URL and referer before storage (tokens, emails, `fbclid`/`gclid`…). Optional whitelist via the `dbseo_404_allowed_query_args` filter (empty by default).
+- DB migration 1.0.0 → 1.1.0: query strings removed from already stored rows too (rows that become duplicates are deleted).
+- The cleanup cron is always registered: with the monitor disabled, previously collected rows are still deleted when the retention period expires.
+
+**DSAR**
+- Eraser (Art. 17): the author's post SEO meta are no longer deleted (editorial content, not personal data — deleting them wiped the site's SEO); reported as `items_retained` with an explanatory message. Only the plugin's user meta is erased.
+- Exporter (Art. 15): `_dbseo_hreflang` added (16 keys).
+- "Privacy capabilities" header block and `DBSEO_DSAR_AVAILABLE` constant.
+
+**No breaking change** for settings. Sites using `dbseo_consent_granted` to return the individual visitor's consent must now return `null` (client-side gate) or a site-wide decision.
 
 ### 1.4.0 — 2026-07
 

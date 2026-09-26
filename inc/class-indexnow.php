@@ -39,7 +39,16 @@ class DBSEO_IndexNow {
 
     private function __construct() {
         $core = DBSEO_Core::instance();
-        if (!$core->get('indexnow_enabled')) return;
+
+        // Disattivato o sospeso da Hard Privacy: nessun hook, nessun cron.
+        // Rimuoviamo anche un eventuale evento schedulato in precedenza, così
+        // WP-Cron non resta con un evento orfano.
+        if (!$core->get('indexnow_enabled') || DBSEO_Core::is_hard_privacy()) {
+            if (wp_next_scheduled('dbseo_cron_indexnow_flush')) {
+                wp_clear_scheduled_hook('dbseo_cron_indexnow_flush');
+            }
+            return;
+        }
 
         // Genera la key se manca.
         if (trim((string) $core->get('indexnow_key')) === '') {
@@ -141,6 +150,10 @@ class DBSEO_IndexNow {
      * ================================================================== */
 
     public function flush_queue() {
+        // Difesa in profondità: mai richieste esterne con Hard Privacy attivo
+        // (es. flush invocato manualmente o da codice terzo).
+        if (DBSEO_Core::is_hard_privacy()) return;
+
         global $wpdb;
         $tbl = $wpdb->prefix . 'dbseo_indexnow_queue';
         if ($wpdb->get_var("SHOW TABLES LIKE '{$tbl}'") !== $tbl) return;

@@ -146,8 +146,9 @@ class DBSEO_Core {
             'indexnow_key'           => '',           // Generato alla prima attivazione.
 
             // -- Hard Privacy mode (toggle globale) --
-            // Quando attivo: forza analytics_enabled=false, meta_pixel_enabled=false,
-            // indexnow_enabled=false, e applica gli hardening filters.
+            // Quando attivo: analytics, Meta Pixel e IndexNow sono sospesi (ogni
+            // modulo controlla DBSEO_Core::is_hard_privacy(), i flag salvati
+            // restano invariati) e vengono applicati gli hardening filters.
             'hard_privacy_enabled'   => false,
             'hard_privacy_strip_emoji'      => true,
             'hard_privacy_strip_oembed'     => true,
@@ -228,6 +229,21 @@ class DBSEO_Core {
     }
 
     /**
+     * Hard Privacy attivo?
+     *
+     * Fonte unica di verità per i moduli con chiamate verso terzi (IndexNow,
+     * Analytics, Meta Pixel): ognuno controlla questo helper invece di
+     * affidarsi a un filtro option_* (che arriverebbe dopo la cache delle
+     * impostazioni). I flag salvati NON vengono modificati: disattivando Hard
+     * Privacy tornano in vigore le impostazioni originali.
+     *
+     * @return bool
+     */
+    public static function is_hard_privacy() {
+        return (bool) self::instance()->get('hard_privacy_enabled');
+    }
+
+    /**
      * Aggiorna una o più opzioni.
      *
      * @param array $updates
@@ -258,6 +274,7 @@ class DBSEO_Core {
             'inc/class-consent-gate.php',
             'inc/class-indexnow.php',
             'inc/class-wp-privacy-tools.php',
+            'inc/class-privacy-declarations.php',
             'inc/class-importer.php',
             'inc/class-metabox.php',
             'inc/class-analyzer.php',
@@ -309,6 +326,12 @@ class DBSEO_Core {
             if (class_exists($class) && method_exists($class, 'instance')) {
                 $this->modules[$slug] = call_user_func(array($class, 'instance'));
             }
+        }
+
+        // Dichiarazioni al registro trattamenti del DB Privacy Hub (classe
+        // statica, pattern ecosistema DB). Inerte se l'Hub non è installato.
+        if (class_exists('DBSEO_Privacy_Declarations')) {
+            DBSEO_Privacy_Declarations::init();
         }
 
         do_action('dbseo_modules_loaded', $this);
@@ -393,6 +416,13 @@ class DBSEO_Core {
         $saved = $this->get('db_version', '0.0.0');
         if (version_compare($saved, DBSEO_DB_VERSION, '<')) {
             self::install();
+
+            // 1.1.0 (plugin 1.5.0): rimozione delle query string già
+            // salvate nel log 404 (potenziali token, email, click ID).
+            if (version_compare($saved, '1.1.0', '<') && class_exists('DBSEO_404_Monitor')) {
+                DBSEO_404_Monitor::strip_stored_query_strings();
+            }
+
             $this->update(array('db_version' => DBSEO_DB_VERSION));
         }
     }

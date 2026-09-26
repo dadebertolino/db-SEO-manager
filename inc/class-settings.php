@@ -230,7 +230,7 @@ class DBSEO_Settings {
                 array(__('Sitemap',        'db-seo-manager'), 'sitemap',    (bool) $core->get('sitemap_enabled'), __('XML sitemap estesa con immagini.', 'db-seo-manager')),
                 array(__('Redirect',       'db-seo-manager'), 'redirects',  (bool) $core->get('redirects_enabled'), __('301/302/307/410 con conteggio aggregato.', 'db-seo-manager')),
                 array(__('Errori 404',     'db-seo-manager'), 'log404',     (bool) $core->get('monitor_404_enabled'), __('Monitor anonimo, nessun IP loggato.', 'db-seo-manager')),
-                array(__('Analytics',      'db-seo-manager'), 'analytics',  (bool) $core->get('analytics_enabled'), __('Snippet emessi solo dopo consenso.', 'db-seo-manager')),
+                array(__('Analytics',      'db-seo-manager'), 'analytics',  (bool) $core->get('analytics_enabled') && !DBSEO_Core::is_hard_privacy(), __('Snippet emessi solo dopo consenso.', 'db-seo-manager')),
             );
             foreach ($cards as $c) :
                 list($label, $slug, $active, $desc) = $c;
@@ -778,7 +778,7 @@ class DBSEO_Settings {
             <span class="db-ui-alert-icon" aria-hidden="true">🔒</span>
             <span><?php
             esc_html_e(
-                'Il consent gate delega a DB Cookie Manager (se attivo) o alla WP Consent API; in fallback rileva Cookiebot e Complianz. Per altri sistemi puoi usare il filter dbseo_consent_granted.',
+                'Il consent gate lavora lato browser (compatibile con la cache di pagina): carica gli script solo dopo il consenso rilevato da DB Cookie Manager (se attivo) o dalla WP Consent API; in fallback rileva Cookiebot e Complianz. Senza alcun consent manager gli script non vengono caricati. Per altri sistemi puoi usare il filter dbseo_consent_granted.',
                 'db-seo-manager'
             );
             ?></span>
@@ -1159,12 +1159,15 @@ class DBSEO_Settings {
                 <table class="db-ui-table">
                     <tbody>
                         <?php
+                        // Stato effettivo: con Hard Privacy le integrazioni
+                        // esterne risultano spente anche se abilitate nei flag.
+                        $hard = DBSEO_Core::is_hard_privacy();
                         $rows = array(
-                            array(__('Hard Privacy mode',         'db-seo-manager'), $core->get('hard_privacy_enabled')),
-                            array(__('Google Analytics / GTM',     'db-seo-manager'), $core->get('analytics_enabled')),
-                            array(__('Consent Mode v2',            'db-seo-manager'), $core->get('analytics_enabled') && $core->get('analytics_consent_mode')),
-                            array(__('Meta Pixel',                 'db-seo-manager'), $core->get('meta_pixel_enabled')),
-                            array(__('IndexNow',                   'db-seo-manager'), $core->get('indexnow_enabled')),
+                            array(__('Hard Privacy mode',         'db-seo-manager'), $hard),
+                            array(__('Google Analytics / GTM',     'db-seo-manager'), !$hard && $core->get('analytics_enabled')),
+                            array(__('Consent Mode v2',            'db-seo-manager'), !$hard && $core->get('analytics_enabled') && $core->get('analytics_consent_mode')),
+                            array(__('Meta Pixel',                 'db-seo-manager'), !$hard && $core->get('meta_pixel_enabled')),
+                            array(__('IndexNow',                   'db-seo-manager'), !$hard && $core->get('indexnow_enabled')),
                             array(__('Monitor 404',                'db-seo-manager'), $core->get('monitor_404_enabled')),
                             array(__('Monitor 404 logga IP',       'db-seo-manager'), $core->get('monitor_404_log_ip')),
                             array(__('Redirect senza conteggio',   'db-seo-manager'), $core->get('redirects_no_count')),

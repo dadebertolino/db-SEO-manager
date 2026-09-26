@@ -4,11 +4,17 @@
  *
  * Privacy by design:
  *  - DEFAULT: spento. L'admin deve attivarlo esplicitamente.
- *  - Quando attivo, salva SOLO: URL richiesto, referer (se presente), conteggio,
- *    timestamp dell'ultimo evento. NESSUN IP, NESSUN user-agent.
+ *  - Quando attivo, salva SOLO: percorso dell'URL richiesto, referer (se
+ *    presente), conteggio, timestamp dell'ultimo evento. NESSUN IP, NESSUN
+ *    user-agent.
+ *  - Query string scartate sia dall'URL sia dal referer (dalla 1.5.0): possono
+ *    contenere token, email, click ID (fbclid/gclid). Whitelist opzionale di
+ *    parametri via filter dbseo_404_allowed_query_args (default vuota).
  *  - L'opzione 'monitor_404_log_ip' esiste ma è hardcoded come "sconsigliato"
  *    nei default e non esposta in UI con la stessa enfasi delle altre.
- *  - Auto-pulizia delle righe più vecchie di N giorni via WP-Cron.
+ *  - Auto-pulizia delle righe più vecchie di N giorni via WP-Cron. Il cron
+ *    resta attivo anche a monitor spento, così i dati già raccolti rispettano
+ *    comunque il periodo di conservazione dichiarato.
  *
  * Nota tecnica:
  *  - Aggregazione: stesso URL → incrementa il contatore della riga esistente.
@@ -32,17 +38,20 @@ class DBSEO_404_Monitor {
     }
 
     private function __construct() {
+        // Cron di pulizia: registrato SEMPRE (anche a monitor spento), così le
+        // righe già salvate vengono comunque eliminate alla scadenza del
+        // periodo di conservazione. Una DELETE al giorno su una tabella
+        // piccola: costo trascurabile.
+        add_action('dbseo_cron_404_cleanup', array($this, 'cleanup'));
+        if (!wp_next_scheduled('dbseo_cron_404_cleanup')) {
+            wp_schedule_event(time() + HOUR_IN_SECONDS, 'daily', 'dbseo_cron_404_cleanup');
+        }
+
         if (!DBSEO_Core::instance()->get('monitor_404_enabled')) return;
 
         // Logging: priorità tardiva su template_redirect, dopo che redirect manager
         // ha avuto la sua chance.
         add_action('template_redirect', array($this, 'maybe_log'), 999);
-
-        // Cron di pulizia.
-        add_action('dbseo_cron_404_cleanup', array($this, 'cleanup'));
-        if (!wp_next_scheduled('dbseo_cron_404_cleanup')) {
-            wp_schedule_event(time() + HOUR_IN_SECONDS, 'daily', 'dbseo_cron_404_cleanup');
-        }
     }
 
     /**
@@ -57,6 +66,9 @@ class DBSEO_404_Monitor {
         }
 
         $url = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '';
+        // Solo percorso (+ eventuali parametri in whitelist): la query string
+        // può contenere dati personali (token, email, fbclid/gclid…).
+        $url = $this->strip_request_query($url);
         if ($url === '') return;
 
         // Filter pubblico per blacklist (es. ignora /wp-json/, /favicon.ico).
@@ -142,17 +154,77 @@ class DBSEO_404_Monitor {
     }
 
     /**
-     * Rimuove username:password e tronca il referer.
+     * Rimuove username:password, query string e frammento; tronca il referer.
      */
     private function sanitize_referer($referer) {
         $parsed = wp_parse_url($referer);
         if (!$parsed || empty($parsed['host'])) return '';
-        // Ricostruzione minima: schema + host + path + query.
+        // Ricostruzione minima: schema + host + path (+ parametri in whitelist).
         $clean = (isset($parsed['scheme']) ? $parsed['scheme'] : 'https') . '://' . $parsed['host'];
         if (!empty($parsed['port']))  $clean .= ':' . $parsed['port'];
         if (!empty($parsed['path']))  $clean .= $parsed['path'];
-        if (!empty($parsed['query'])) $clean .= '?' . $parsed['query'];
+        $query = $this->filter_query(isset($parsed['query']) ? $parsed['query'] : '');
+        if ($query !== '') $clean .= '?' . $query;
         return mb_substr($clean, 0, 2000);
+    }
+
+    /**
+     * Riduce un REQUEST_URI al solo percorso, più gli eventuali parametri
+     * ammessi in whitelist.
+     *
+     * @param string $uri
+     * @return string
+     */
+    private function strip_request_query($uri) {
+        $uri   = (string) $uri;
+        $uri   = explode('#', $uri, 2)[0];
+        $parts = explode('?', $uri, 2);
+        $path  = $parts[0];
+        $query = $this->filter_query(isset($parts[1]) ? $parts[1] : '');
+        return $query !== '' ? $path . '?' . $query : $path;
+    }
+
+    /**
+     * Mantiene solo i parametri in whitelist (default: nessuno).
+     *
+     * Filter dbseo_404_allowed_query_args: array di nomi di parametro da
+     * conservare (es. array('lang', 'page_id')). Da usare solo per parametri
+     * che non possono contenere dati personali.
+     *
+     * @param string $query
+     * @return string
+     */
+    private function filter_query($query) {
+        if ($query === '') return '';
+        $allowed = array_filter(array_map('strval', (array) apply_filters('dbseo_404_allowed_query_args', array())));
+        if (empty($allowed)) return '';
+
+        $args = array();
+        wp_parse_str($query, $args);
+        $kept = array_intersect_key($args, array_flip($allowed));
+        return empty($kept) ? '' : http_build_query($kept);
+    }
+
+    /**
+     * Migrazione (DB 1.1.0): rimuove le query string dalle righe salvate
+     * dalle versioni precedenti. Gli URL che diventano duplicati di una
+     * riga già esistente vengono eliminati (UPDATE IGNORE + DELETE).
+     */
+    public static function strip_stored_query_strings() {
+        global $wpdb;
+        $tbl = $wpdb->prefix . 'dbseo_404_log';
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $tbl)) !== $tbl) return;
+
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- nome tabella da $wpdb->prefix, nessun input utente.
+        $wpdb->query("UPDATE {$tbl} SET referer = SUBSTRING_INDEX(referer, '?', 1) WHERE referer LIKE '%?%'");
+        $wpdb->query(
+            "UPDATE IGNORE {$tbl}
+             SET url = SUBSTRING_INDEX(url, '?', 1),
+                 url_hash = SHA1(LOWER(SUBSTRING_INDEX(url, '?', 1)))
+             WHERE url LIKE '%?%'"
+        );
+        $wpdb->query("DELETE FROM {$tbl} WHERE url LIKE '%?%'");
+        // phpcs:enable
     }
 
     private function insert_or_increment($url, $referer) {

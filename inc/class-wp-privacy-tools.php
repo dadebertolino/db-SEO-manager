@@ -8,9 +8,17 @@
  *
  * Il plugin SEO Manager NON raccoglie dati personali degli utenti finali,
  * ma gli autori del blog possono aver scritto meta SEO custom sui propri
- * post (titolo SEO, descrizione, OpenGraph, ecc.). Questi sono dati
- * personali nel senso ampio (dati prodotti dall'autore identificato) e
- * vanno inclusi nelle richieste DSAR per completezza.
+ * post (titolo SEO, descrizione, OpenGraph, ecc.).
+ *
+ *  - Accesso (art. 15): i meta SEO dei post dell'autore vengono esportati
+ *    per trasparenza (sono collegati a un autore identificato).
+ *  - Cancellazione (art. 17): i meta SEO dei post NON vengono cancellati.
+ *    Sono contenuto editoriale del sito (titoli, descrizioni, canonical,
+ *    direttive robots, hreflang…), non dati personali dell'autore: la loro
+ *    cancellazione distruggerebbe la SEO delle pagine senza alcun beneficio
+ *    per l'interessato. L'eraser li segnala come "conservati" con un
+ *    messaggio esplicativo. Viene cancellato solo lo user meta del plugin
+ *    collegato all'utente (preferenza UI della notice Privacy Hub).
  *
  * Compatibilità: se il DB Privacy Hub non è installato, gli hook non
  * scattano e questa classe è inerte. Per retrocompatibilità con
@@ -29,7 +37,7 @@ class DBSEO_WP_Privacy_Tools {
     private static $instance = null;
 
     /**
-     * Lista delle 15 chiavi meta SEO che possono essere personalizzate
+     * Lista delle chiavi meta SEO che possono essere personalizzate
      * sui singoli post da chi li scrive. Centralizzata qui per essere
      * unica fonte di verità tra exporter ed eraser.
      */
@@ -49,6 +57,12 @@ class DBSEO_WP_Privacy_Tools {
         '_dbseo_score'                 => 'Score',
         '_dbseo_cornerstone'           => 'Cornerstone',
         '_dbseo_schema_type'           => 'Schema type',
+        '_dbseo_hreflang'              => 'Hreflang',
+    );
+
+    /** User meta del plugin collegati all'utente (non editoriali). */
+    const USER_META_KEYS = array(
+        'dbseo_privacy_hub_notice_dismissed',
     );
 
     public static function instance() {
@@ -179,7 +193,11 @@ class DBSEO_WP_Privacy_Tools {
      * ================================================================== */
 
     /**
-     * Cancella i meta SEO custom sui post di un utente.
+     * Diritto alla cancellazione per un utente.
+     *
+     * - Meta SEO dei post: CONSERVATI (contenuto editoriale, non dati
+     *   personali); segnalati con items_retained e messaggio.
+     * - User meta del plugin: cancellati.
      *
      * @param string $email_address
      * @param int    $page
@@ -196,32 +214,41 @@ class DBSEO_WP_Privacy_Tools {
             );
         }
 
-        $per_page = 50;
-        $page     = max(1, (int) $page);
-        $posts    = get_posts(array(
-            'author'         => $user->ID,
-            'posts_per_page' => $per_page,
-            'paged'          => $page,
-            'post_type'      => 'any',
-            'post_status'    => 'any',
-            'fields'         => 'ids',
+        $removed = false;
+        foreach (self::USER_META_KEYS as $key) {
+            if (metadata_exists('user', $user->ID, $key)) {
+                delete_user_meta($user->ID, $key);
+                $removed = true;
+            }
+        }
+
+        // Esiste almeno un post dell'autore con meta SEO personalizzati?
+        $meta_query = array('relation' => 'OR');
+        foreach (array_keys(self::META_KEYS) as $key) {
+            $meta_query[] = array('key' => $key, 'compare' => 'EXISTS');
+        }
+        $with_meta = get_posts(array(
+            'author'           => $user->ID,
+            'posts_per_page'   => 1,
+            'post_type'        => 'any',
+            'post_status'      => 'any',
+            'fields'           => 'ids',
+            'no_found_rows'    => true,
+            'suppress_filters' => true,
+            'meta_query'       => $meta_query, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
         ));
 
-        $removed = false;
-        foreach ($posts as $post_id) {
-            foreach (array_keys(self::META_KEYS) as $key) {
-                if (metadata_exists('post', $post_id, $key)) {
-                    delete_post_meta($post_id, $key);
-                    $removed = true;
-                }
-            }
+        $messages = array();
+        $retained = !empty($with_meta);
+        if ($retained) {
+            $messages[] = __('DB SEO Manager: i metadati SEO dei contenuti pubblicati dall\'utente (titolo SEO, descrizione, canonical, OpenGraph, direttive robots, hreflang…) sono stati conservati: sono contenuto editoriale del sito, non dati personali dell\'autore, e la loro cancellazione comprometterebbe l\'indicizzazione delle pagine. Se contengono dati personali, modificarli manualmente dall\'editor.', 'db-seo-manager');
         }
 
         return array(
             'items_removed'  => $removed,
-            'items_retained' => false,
-            'messages'       => array(),
-            'done'           => count($posts) < $per_page,
+            'items_retained' => $retained,
+            'messages'       => $messages,
+            'done'           => true,
         );
     }
 }
