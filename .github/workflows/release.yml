@@ -12,7 +12,7 @@ jobs:
     name: Build ZIP & attach to Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Build plugin ZIP
         run: |
@@ -22,7 +22,7 @@ jobs:
           cd build && zip -r ../$PLUGIN.zip $PLUGIN
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: db-seo-manager.zip
           generate_release_notes: true
